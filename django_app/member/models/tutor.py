@@ -1,5 +1,5 @@
 from django.db import models
-from .myuser import MyUser
+from . import MyUser
 
 
 class Tutor(models.Model):

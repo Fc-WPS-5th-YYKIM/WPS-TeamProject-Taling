@@ -32,11 +32,6 @@ class Lecture(models.Model):
         (9, '9'),
     )
 
-    # myuser = models.ManyToManyField(
-    student = models.ManyToManyField(
-        MyUser,
-        # related_name='student',
-    )
     tutor = models.ForeignKey(
         Tutor,
     )

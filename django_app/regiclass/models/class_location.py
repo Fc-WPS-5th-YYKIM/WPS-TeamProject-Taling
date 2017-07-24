@@ -3,7 +3,7 @@ from django.db import models
 from . import Lecture
 
 
-class ClassLocation(models.model):
+class ClassLocation(models.Model):
     CLASS_WEEKDAY_CHOICE = (
         (1, '월'),
         (2, '화'),

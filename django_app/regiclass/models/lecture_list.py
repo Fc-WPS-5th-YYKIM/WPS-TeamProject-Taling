@@ -1,7 +1,7 @@
 from django.db import models
 
+from . import Lecture
 from member.models import MyUser
-from regiclass.models import Lecture
 
 
 class LectureList(models.Model):

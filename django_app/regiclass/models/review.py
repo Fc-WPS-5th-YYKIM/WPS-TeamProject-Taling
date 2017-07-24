@@ -11,23 +11,18 @@ class Review(models.Model):
         MyUser,
     )
     curriculum_rate = models.IntegerField(
-        max_length=10,
         default=0,
     )
     delivery_rate = models.IntegerField(
-        max_length=10,
         default=0,
     )
     preparation_rate = models.IntegerField(
-        max_length=10,
         default=0,
     )
     kindness_rate = models.IntegerField(
-        max_length=10,
         default=0,
     )
     punctually_rate = models.IntegerField(
-        max_length=10,
         default=0,
     )
     content = models.CharField(

@@ -3,9 +3,6 @@ from django.db import models
 
 
 # Create your models here.
-from member.models.lecture_list import LectureList
-from regiclass.models import Lecture, Review
-
 
 class MyUser(AbstractUser):
     profile_photo = models.ImageField(
@@ -16,11 +13,11 @@ class MyUser(AbstractUser):
         max_length=1,
         default='D',
     )
-    lecture_list = models.ManyToManyField(
-        Lecture,
-        through=LectureList,
-    )
-    review_list = models.ManyToManyField(
-        Lecture,
-        through=Review,
-    )
+    # lecture_list = models.ManyToManyField(
+    #     'Lecture',
+    #     through='LectureList',
+    # )
+    # review_list = models.ManyToManyField(
+    #     'Lecture',
+    #     through='Review',
+    # )
