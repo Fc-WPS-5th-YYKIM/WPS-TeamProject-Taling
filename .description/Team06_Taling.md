@@ -16,7 +16,7 @@
 ## 2. Information Architecture
 
 ![Information_Architecture]
-(https://github.com/yykdev/WPS-TeamProject-Taling/blob/master/.description/images/02_01_Information_Architecture.png?raw=true)
+(https://raw.githubusercontent.com/yykdev/WPS-TeamProject-Taling/master/.description/images/02_01_Information_Architecture.png)
 
 ####1. 회원가입
  - 페이스북 회원가입
