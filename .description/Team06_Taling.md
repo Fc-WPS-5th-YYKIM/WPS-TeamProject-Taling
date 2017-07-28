@@ -9,11 +9,11 @@
 1. -
 2. Information Architecture
 3. -
-4. -
+4. QnA
 
 ---
 
-## 2. Information Architecture
+## Information Architecture
 
 ![Information_Architecture]
 (https://raw.github.com/yykdev/WPS-TeamProject-Taling/master/.description/images/02_01_Information_Architecture.png)
@@ -39,12 +39,12 @@
  
 ---
 
-## 3.
+## dd
 
 1. -
 
 ---
 
-## 4.
+## QnA
 
-1. -
+#모델링, 서버 배포 밖에 한게 없어서 없음
