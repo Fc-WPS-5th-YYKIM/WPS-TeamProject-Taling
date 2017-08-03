@@ -44,6 +44,34 @@ class TalingLogin(APIView):
         return Response({'token': token.key})
 
 
+class FaceBookLogin(APIView):
+    def get(self, request):
+        access_token = access_token_test(request)
+        debug_result = debug_token(access_token)
+        print(debug_result)
+
+        def get_user_info(user_id, token):
+            url_user_info = 'https://graph.facebook.com/v2.9/{user_id}'.format(user_id=user_id)
+            url_user_info_params = {
+                'access_token': token,
+                'fields': ','.join([
+                    'id',
+                    'name',
+                    'email',
+                    'picture',
+                ])
+            }
+            response = requests.get(url_user_info, params=url_user_info_params)
+            result = response.json()
+            print(result)
+            return result
+
+        user_info = get_user_info(user_id=debug_result['data']['user_id'], token=access_token)
+        user = MyUser.objects.get_or_create_facebook_user(user_info)
+        token, created = user.get_user_token(user.pk)
+        return Response({'token': token.key})
+
+
 class MyUserList(generics.ListCreateAPIView):
     queryset = MyUser.objects.all()
     serializer_class = MyUserSerializer
