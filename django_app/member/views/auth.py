@@ -29,6 +29,21 @@ class TalingSignUp(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class TalingLogin(APIView):
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = MyUser.objects.get(username=username)
+        if password != user.password:
+            return Response('비밀번호가 일치하지 않습니다.')
+
+        token, created = user.get_user_token(user.pk)
+        print(token)
+
+        return Response({'token': token.key})
+
+
 class MyUserList(generics.ListCreateAPIView):
     queryset = MyUser.objects.all()
     serializer_class = MyUserSerializer
