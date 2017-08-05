@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers, exceptions
 from rest_framework.authtoken.models import Token
+from django.utils.translation import ugettext_lazy as _
+from rest_framework.response import Response
 
 MyUser = get_user_model()
 
@@ -60,8 +62,24 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
         return data
 
-# class TalingLoginSerializer(serializers.ModelSerializer):
 
+class TalingLoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=36, write_only=True)
+    password = serializers.CharField(max_length=64, write_only=True)
+
+    def validate(self, data):
+        username = data['username']
+        password = data['password']
+
+        user = MyUser.objects.get(username=username)
+
+        auth = authenticate(username=username, password=password)
+
+        if auth == None:
+            raise serializers.ValidationError({"detail": "Password is not matched"})
+
+        token, created = user.get_user_token(user.pk)
+        return token.key
 
 
 class MyUserToken(serializers.ModelSerializer):
