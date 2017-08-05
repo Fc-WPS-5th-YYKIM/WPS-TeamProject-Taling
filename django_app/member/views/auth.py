@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from member.pagination import PostPagination
-from member.serializers import MyUserSerializer, UserCreateSerializer
+from member.serializers import MyUserSerializer, UserCreateSerializer, TalingLoginSerializer
 from utils.access_token_test import access_token_test, debug_token
 
 MyUser = get_user_model()
@@ -25,28 +25,44 @@ class TalingSignUp(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TalingLogin(APIView):
-    def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
+    serializer_class = TalingLoginSerializer
 
-        user = MyUser.objects.get(username=username)
-        if password != user.password:
-            return Response('비밀번호가 일치하지 않습니다.')
+    def post(self, request, format=None):
+        print('hello')
+        serializer = TalingLoginSerializer(data=request.data)
 
-        token, created = user.get_user_token(user.pk)
-        print(token)
+        if serializer.is_valid(raise_exception=True):
+            token_key = serializer.validated_data
 
-        return Response({'token': token.key})
+
+        return Response({'token': token_key})
+
+    # def post(self, request):
+    #     username = request.POST['username']
+    #     password = request.POST['password']
+    #
+    #     user = MyUser.objects.get(username=username)
+    #     print(password)
+    #     print(user.password)
+    #     # if password != user.password:
+    #     #     return Response('비밀번호가 일치하지 않습니다.')
+    #
+    #     token, created = user.get_user_token(user.pk)
+    #     print(token)
+    #
+    #     return Response({'token': token.key})
 
 
 class FaceBookLogin(APIView):
     def get(self, request):
         access_token = access_token_test(request)
+        print(access_token)
         debug_result = debug_token(access_token)
         print(debug_result)
 
