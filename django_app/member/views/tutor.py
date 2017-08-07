@@ -23,7 +23,7 @@ class TutorRegister(APIView):
             instance = serializer.validated_data
             print(instance, 'cocoball')
             user.info_update(
-                # my_photo=
+                my_photo=instance['my_photo'],
                 nickname=instance['nickname'],
                 phone=instance['phone'],
             )
