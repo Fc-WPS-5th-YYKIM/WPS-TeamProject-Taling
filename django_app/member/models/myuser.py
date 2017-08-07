@@ -2,10 +2,14 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as DefaultUserManager
 from django.db import models
 
-from regiclass.models.lecture import Lecture, Enrollment
+from regiclass.models import Lecture, Enrollment
 from utils import CustomImageField
 
 from rest_framework.authtoken.models import Token
+
+__all__ = (
+    'MyUser'
+)
 
 
 class MyUserManager(DefaultUserManager):
@@ -65,6 +69,8 @@ class MyUser(AbstractUser):
         through=Enrollment,
         related_name='enroll_lectures',
     )
+
+    nickname = models.CharField(max_length=20, null=True, blank=True)
 
     user_token = models.ManyToManyField(Token)
 
