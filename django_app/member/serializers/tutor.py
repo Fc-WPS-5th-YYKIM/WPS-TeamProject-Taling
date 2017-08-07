@@ -13,11 +13,11 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(required=True)
     cert_name = serializers.ListField(
         child=serializers.CharField(),
-        write_only=True
+        # write_only=True
     )
     cert_photo = serializers.ListField(
         child=serializers.ImageField(),
-        write_only=True
+        # write_only=True
     )
 
     class Meta:
@@ -35,7 +35,25 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
             'cert_photo',
         )
 
-    def validate(self, data):
+    def validate_my_photo(self, data):
+        print(data)
         return data
 
+    def validate_nickname(self, data):
+        print(data)
+        return data
 
+    def validate_phone(self, data):
+        print(data)
+        return data
+
+    def validate_cert_name(self, data):
+        print(data)
+        return data
+
+    def validate_cert_photo(self, data):
+        print(data)
+        return data
+
+    def validate(self, data):
+        return data

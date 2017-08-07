@@ -2,10 +2,14 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as DefaultUserManager
 from django.db import models
 
-from regiclass.models.lecture import Lecture, Enrollment
+from regiclass.models import Lecture, Enrollment
 from utils import CustomImageField
 
 from rest_framework.authtoken.models import Token
+
+__all__ = (
+    'MyUser'
+)
 
 
 class MyUserManager(DefaultUserManager):
@@ -44,10 +48,6 @@ class MyUser(AbstractUser):
         max_length=13,
         blank=True,
     )
-    nickname = models.CharField(
-        max_length=24,
-        blank=True,
-    )
 
     ##
     # 유저타입. 기본은 Django, 페이스북 로그인 시 USER_TYPE_FACEBOOK 값을 갖는다.
@@ -65,6 +65,8 @@ class MyUser(AbstractUser):
         through=Enrollment,
         related_name='enroll_lectures',
     )
+
+    nickname = models.CharField(max_length=20, null=True, blank=True)
 
     user_token = models.ManyToManyField(Token)
 

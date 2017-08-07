@@ -1,18 +1,27 @@
+from django.conf import settings
 from django.db import models
-from . import MyUser
+
+from member.models import MyUser
 
 
 class Tutor(models.Model):
+    CERT_TYPE_UNIV = 'univ'
+    CERT_TYPE_GRAD = 'grad'
+    CERT_TYPE_IDENTITY = 'identity'
+
     CERT_TYPE_CHOICE = (
-        ('대학', '대학인증'),
-        ('대학원', '대학원인증'),
-        ('신분증', '신분증인증'),
+        (CERT_TYPE_UNIV, '대학인증'),
+        (CERT_TYPE_GRAD, '대학원인증'),
+        (CERT_TYPE_IDENTITY, '신분증인증'),
     )
 
+    STATUS_TYPE_ING = 'ing'
+    STATUS_TYPE_GRADUATION = 'graduation'
+    STATUS_TYPE_COMPLETE = 'complete'
     STATUS_TYPE_CHOICE = (
-        ('재학', '재학'),
-        ('졸업', '졸업'),
-        ('수료', '수료'),
+        ('ing', '재학'),
+        ('graduation', '졸업'),
+        ('complete', '수료'),
     )
 
     author = models.OneToOneField(
