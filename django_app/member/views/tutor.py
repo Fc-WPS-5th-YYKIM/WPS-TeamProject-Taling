@@ -7,7 +7,7 @@ from member.serializers import TutorRegisterSerializer
 
 MyUser = get_user_model()
 
-
+print('흐아앙')
 class TutorRegister(APIView):
 
     serializer_class = TutorRegisterSerializer
@@ -23,7 +23,7 @@ class TutorRegister(APIView):
             instance = serializer.validated_data
             print(instance, 'cocoball')
             user.info_update(
-                # my_photo=
+                my_photo=instance['my_photo'],
                 nickname=instance['nickname'],
                 phone=instance['phone'],
             )
