@@ -25,7 +25,7 @@ urlpatterns = [
 
     # http://service/member/ 로 들어오는 모든 요청을 member 에 위임하여 처리한다.
     url(r'^member/', include('member.urls')),
-
+    url(r'^regiclass/', include('regiclass.urls')),
     url(r'^api-token-auth/', views.obtain_auth_token),
 ]
 
