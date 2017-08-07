@@ -119,4 +119,4 @@ STATICFILES_DIRS = [
 ]
 
 # Custom User (default: auth.User)
-AUTH_USER_MODEL = 'member.MyUser'
+AUTH_USER_MODEL = 'member.MyUser'  
