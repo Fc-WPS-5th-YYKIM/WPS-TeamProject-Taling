@@ -7,7 +7,7 @@ from member.serializers import TutorRegisterSerializer
 
 MyUser = get_user_model()
 
-
+print('흐아앙')
 class TutorRegister(APIView):
 
     serializer_class = TutorRegisterSerializer
