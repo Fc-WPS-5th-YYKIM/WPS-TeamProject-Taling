@@ -37,7 +37,6 @@ class Migration(migrations.Migration):
                 ('my_photo', utils.fields.custom_image_fields.CustomImageField(blank=True, upload_to='user/%Y/%m/%d')),
                 ('email', models.EmailField(blank=True, max_length=254)),
                 ('phone', models.CharField(blank=True, max_length=13)),
-                ('nickname', models.CharField(blank=True, max_length=24)),
                 ('user_type', models.CharField(choices=[('d', 'Django'), ('f', 'Facebook')], default='d', max_length=1)),
                 ('nickname', models.CharField(blank=True, max_length=20, null=True)),
             ],

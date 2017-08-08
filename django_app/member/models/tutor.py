@@ -15,10 +15,13 @@ class Tutor(models.Model):
         (CERT_TYPE_IDENTITY, '신분증인증'),
     )
 
+    STATUS_TYPE_ING = 'ing'
+    STATUS_TYPE_GRADUATION = 'graduation'
+    STATUS_TYPE_COMPLETE = 'complete'
     STATUS_TYPE_CHOICE = (
-        ('재학', '재학'),
-        ('졸업', '졸업'),
-        ('수료', '수료'),
+        ('ing', '재학'),
+        ('graduation', '졸업'),
+        ('complete', '수료'),
     )
 
     author = models.OneToOneField(
