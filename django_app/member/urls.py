@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^login/$', views.TalingLogin.as_view(), name='login'),
     url(r'^login/facebook/$', views.FaceBookLogin.as_view(), name='facebook-login'),
     url(r'^signup/$', views.TalingSignUp.as_view(), name='signup'),
+    url(r'^profile/change/(?P<username>[\w-]+)/$', views.ChangeMyProfile.as_view(), name='change-profile'),
 
     # Tutor
     url(r'^tutor/register/$', views.TutorRegister.as_view(), name='tutor-register'),

@@ -2,6 +2,7 @@ import requests
 from django.contrib.auth import get_user_model
 
 from rest_framework import generics, status
+from rest_framework.generics import UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -34,7 +35,7 @@ class TalingLogin(APIView):
     serializer_class = TalingLoginSerializer
 
     def post(self, request, format=None):
-        print('hello')
+
         serializer = TalingLoginSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -43,20 +44,11 @@ class TalingLogin(APIView):
 
         return Response({'token': token_key})
 
-    # def post(self, request):
-    #     username = request.POST['username']
-    #     password = request.POST['password']
-    #
-    #     user = MyUser.objects.get(username=username)
-    #     print(password)
-    #     print(user.password)
-    #     # if password != user.password:
-    #     #     return Response('비밀번호가 일치하지 않습니다.')
-    #
-    #     token, created = user.get_user_token(user.pk)
-    #     print(token)
-    #
-    #     return Response({'token': token.key})
+
+class ChangeMyProfile(UpdateAPIView):
+    queryset = MyUser.objects.all()
+    serializer_class = UserCreateSerializer
+    lookup_field = 'username'
 
 
 class FaceBookLogin(APIView):
