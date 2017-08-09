@@ -48,6 +48,7 @@ class Lecture(models.Model):
 
     tutor = models.ForeignKey(
         'member.Tutor',
+        on_delete=models.CASCADE,
     )
     title = models.CharField(
         max_length=30,
@@ -93,10 +94,12 @@ class Lecture(models.Model):
     )
     youtube_url1 = models.CharField(
         max_length=100,
+        blank=True,
         null=True,
     )
     youtube_url2 = models.CharField(
         max_length=100,
+        blank=True,
         null=True,
     )
     region_comment = models.CharField(

@@ -1,1 +1,1 @@
-from .lecture import *
+from .lecture import LectureListSerializer, LectureMakeSerializer
