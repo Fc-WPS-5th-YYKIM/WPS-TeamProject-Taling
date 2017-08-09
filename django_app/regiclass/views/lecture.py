@@ -1,34 +1,81 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework import permissions, status
+from django.core import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from regiclass.models import Lecture
-from regiclass.serializers import LectureSerializer
+from member.models import Tutor
+from regiclass.models import Lecture, ClassLocation, LecturePhoto
+from regiclass.serializers import LectureListSerializer, LectureMakeSerializer
+
+MyUser = get_user_model()
 
 
 class LectureMake(APIView):
-    permissions_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = LectureSerializer
+    serializer_class = LectureMakeSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
+        user = MyUser.objects.get(pk=request.user.id)
         if serializer.is_valid():
-            serializer.save(tutor=request.user.tutor)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            tutor = Tutor.objects.get(author=request.user)
+            instance = serializer.validated_data
+
+            lecture, lecture_created = Lecture.objects.get_or_create(
+                tutor=tutor,
+                title=instance['title'],
+                category=instance['category'],
+                class_type=instance['class_type'],
+                min_member=instance['min_member'],
+                max_member=instance['max_member'],
+                cover_photo=instance['cover_photo'],
+                tutor_intro=instance['tutor_intro'],
+                class_intro=instance['class_intro'],
+                target_intro=instance['target_intro'],
+                price=instance['price'],
+                basic_class_time=instance['basic_class_time'],
+                total_count=instance['total_count'],
+                youtube_url1=instance['youtube_url1'],
+                youtube_url2=instance['youtube_url2'],
+                region_comment=instance['region_comment'],
+                notice=instance['notice'],
+            )
+
+            if lecture_created:
+                for i in range(len(instance['location1'])):
+                    ClassLocation.objects.get_or_create(
+                        lecture=lecture,
+                        location1=instance['location1'][i],
+                        location2=instance['location2'][i],
+                        location_option=instance['location_option'][i],
+                        location_detail=instance['location_detail'][i],
+                        location_etc_type=instance['location_etc_type'][i],
+                        location_etc_text=instance['location_etc_text'][i],
+                        class_weekday=instance['class_weekday'][i],
+                        class_time=instance['class_time'][i],
+                    )
+
+                for j in range(len(instance['photo_type'])):
+                    LecturePhoto.objects.get_or_create(
+                        lecture=lecture,
+                        photo_type=instance['photo_type'][j],
+                        photo=instance['photo'][j],
+                    )
+
+            return Response({'result': status.HTTP_201_CREATED})
+        return Response({'result': status.HTTP_400_BAD_REQUEST})
 
 
 class LectureList(APIView):
-    serializer_class = LectureSerializer
-    permissions_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = LectureListSerializer
 
     def get(self, request):
         search_text = request.GET.get('search_text', '')
         lecture_list = Lecture.objects.filter(
             (Q(title__contains=search_text) | Q(tutor__author__nickname__contains=search_text))
-            # &
-            # (Q(title__contains=search_text))
         )
+        # test = Lecture.objects.get(pk=10)
+        # test2 = test.lecturephoto_set.all()
         serializer = self.serializer_class(lecture_list, many=True)
         return Response(serializer.data)
