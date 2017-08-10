@@ -8,20 +8,37 @@ __all__ = (
 
 
 class Lecture(models.Model):
+    CATEGORY_HEALTHNBEAUTY = 'hbn'
+    CATEGORY_LANG = 'lang'
+    CATEGORY_COMPUTER = 'com'
+    CATEGORY_MUSICNART = 'mna'
+    CATEGORY_SPORTS = 'sports'
+    CATEGORY_MAJOR = 'major'
+    CATEGORY_HOBBY = 'hobby'
+
+    CLASS_TYPE_ONETOONE = 'onetoone'
+    CLASS_TYPE_GROUP = 'group'
+    CLASS_TYPE_ONEDAY = 'oneday'
+
+    STATE_EDITING = 'editing'
+    STATE_ACTIVITY = 'activity'
+
     CATEGORY_CHOICE = (
-        ('1', '헬스&뷰티'),
-        ('2', '외국어'),
-        ('3', '컴퓨터'),
-        ('4', '음악 / 미술'),
-        ('5', '스포츠'),
-        ('6', '전공 / 취업'),
-        ('7', '이색취미'),
+        (CATEGORY_HEALTHNBEAUTY, '헬스&뷰티'),
+        (CATEGORY_LANG, '외국어'),
+        (CATEGORY_COMPUTER, '컴퓨터'),
+        (CATEGORY_MUSICNART, '음악 / 미술'),
+        (CATEGORY_SPORTS, '스포츠'),
+        (CATEGORY_MAJOR, '전공 / 취업'),
+        (CATEGORY_HOBBY, '이색취미'),
     )
+
     CLASS_TYPE_CHOICE = (
-        ('1', '1:1수업'),
-        ('2', '그룹수업'),
-        ('3', '원데이')
+        (CLASS_TYPE_ONETOONE, '1:1수업'),
+        (CLASS_TYPE_GROUP, '그룹수업'),
+        (CLASS_TYPE_ONEDAY, '원데이')
     )
+
     MEMBER_COUNT = (
         ('1', '1'),
         ('2', '2'),
@@ -34,8 +51,14 @@ class Lecture(models.Model):
         ('9', '9'),
     )
 
+    STATE_CHOICE = (
+        (STATE_EDITING, '작성중'),
+        (STATE_ACTIVITY, '활동중'),
+    )
+
     tutor = models.ForeignKey(
         'member.Tutor',
+        on_delete=models.CASCADE,
     )
     title = models.CharField(
         max_length=30,
@@ -81,10 +104,12 @@ class Lecture(models.Model):
     )
     youtube_url1 = models.CharField(
         max_length=100,
+        blank=True,
         null=True,
     )
     youtube_url2 = models.CharField(
         max_length=100,
+        blank=True,
         null=True,
     )
     region_comment = models.CharField(
@@ -95,6 +120,13 @@ class Lecture(models.Model):
         max_length=100,
         null=True,
     )
+    state = models.CharField(
+        max_length=8,
+        choices=STATE_CHOICE,
+        default=STATE_EDITING,
+    )
+    create_date = models.DateTimeField(auto_now_add=True)
+    modify_date = models.DateTimeField(auto_now=True)
 
 
 class Enrollment(models.Model):
