@@ -34,6 +34,4 @@ urlpatterns += [
     url(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_DIR)
 urlpatterns += static('/static/', document_root='project/.static_root')
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
