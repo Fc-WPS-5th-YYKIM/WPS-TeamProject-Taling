@@ -19,7 +19,7 @@ class LectureMake(APIView):
         serializer = self.serializer_class(data=request.data)
         user = MyUser.objects.get(pk=request.user.id)
         if serializer.is_valid():
-            tutor = Tutor.objects.get(author=request.user)
+            tutor = Tutor.objects.get(author=user)
             instance = serializer.validated_data
 
             lecture, lecture_created = Lecture.objects.get_or_create(
@@ -72,10 +72,19 @@ class LectureList(APIView):
 
     def get(self, request):
         search_text = request.GET.get('search_text', '')
+        order_by = request.GET.get('ordering', '-modify_date')
         lecture_list = Lecture.objects.filter(
             (Q(title__contains=search_text) | Q(tutor__author__nickname__contains=search_text))
-        )
-        # test = Lecture.objects.get(pk=10)
-        # test2 = test.lecturephoto_set.all()
+        ).order_by(order_by)
         serializer = self.serializer_class(lecture_list, many=True)
+        return Response(serializer.data)
+
+
+class LectureDetail(APIView):
+    serializer_class = LectureListSerializer
+
+    def post(self, request):
+        lecture_id = request.POST.get('lecture_id')
+        lecture = Lecture.objects.get(pk=lecture_id)
+        serializer = self.serializer_class(lecture)
         return Response(serializer.data)

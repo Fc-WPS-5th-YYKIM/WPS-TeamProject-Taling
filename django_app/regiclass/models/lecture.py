@@ -20,6 +20,9 @@ class Lecture(models.Model):
     CLASS_TYPE_GROUP = 'group'
     CLASS_TYPE_ONEDAY = 'oneday'
 
+    STATE_EDITING = 'editing'
+    STATE_ACTIVITY = 'activity'
+
     CATEGORY_CHOICE = (
         (CATEGORY_HEALTHNBEAUTY, '헬스&뷰티'),
         (CATEGORY_LANG, '외국어'),
@@ -29,11 +32,13 @@ class Lecture(models.Model):
         (CATEGORY_MAJOR, '전공 / 취업'),
         (CATEGORY_HOBBY, '이색취미'),
     )
+
     CLASS_TYPE_CHOICE = (
         (CLASS_TYPE_ONETOONE, '1:1수업'),
         (CLASS_TYPE_GROUP, '그룹수업'),
         (CLASS_TYPE_ONEDAY, '원데이')
     )
+
     MEMBER_COUNT = (
         ('1', '1'),
         ('2', '2'),
@@ -44,6 +49,11 @@ class Lecture(models.Model):
         ('7', '7'),
         ('8', '8'),
         ('9', '9'),
+    )
+
+    STATE_CHOICE = (
+        (STATE_EDITING, '작성중'),
+        (STATE_ACTIVITY, '활동중'),
     )
 
     tutor = models.ForeignKey(
@@ -110,6 +120,13 @@ class Lecture(models.Model):
         max_length=100,
         null=True,
     )
+    state = models.CharField(
+        max_length=8,
+        choices=STATE_CHOICE,
+        default=STATE_EDITING,
+    )
+    create_date = models.DateTimeField(auto_now_add=True)
+    modify_date = models.DateTimeField(auto_now=True)
 
 
 class Enrollment(models.Model):
