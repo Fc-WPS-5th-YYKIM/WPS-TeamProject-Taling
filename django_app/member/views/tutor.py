@@ -3,13 +3,15 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from braces.views import LoginRequiredMixin
+
 from member.models import Tutor, Certification
 from member.serializers import TutorRegisterSerializer
 
 MyUser = get_user_model()
 
 
-class TutorRegister(APIView):
+class TutorRegister(APIView, LoginRequiredMixin):
 
     serializer_class = TutorRegisterSerializer
     # permission_classes =

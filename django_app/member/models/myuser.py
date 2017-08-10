@@ -33,10 +33,6 @@ class MyUserManager(DefaultUserManager):
 
 
 class MyUser(AbstractUser):
-    confirm_password = models.CharField(
-        max_length=64,
-        blank=True,
-    )
     my_photo = CustomImageField(
         upload_to='user/%Y/%m/%d',
         blank=True,
