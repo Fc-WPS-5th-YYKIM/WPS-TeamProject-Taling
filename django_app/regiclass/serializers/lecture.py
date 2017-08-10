@@ -1,34 +1,10 @@
 from rest_framework import serializers
 
 from regiclass.models import Lecture, ClassLocation, LecturePhoto
+from regiclass.serializers import ReviewSerializer
 
 
 class ClassLocationSerializer(serializers.ModelSerializer):
-    # location1 = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # location2 = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # location_option = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # location_detail = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # location_etc_type = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # location_etc_text = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # class_weekday = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # class_time = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-
     class Meta:
         model = ClassLocation
         fields = (
@@ -44,16 +20,6 @@ class ClassLocationSerializer(serializers.ModelSerializer):
 
 
 class LecturePhotoSerializer(serializers.ModelSerializer):
-    # photo_type = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # photo = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-    # description = serializers.ListField(
-    #     child=serializers.CharField(),
-    # )
-
     class Meta:
         model = LecturePhoto
         fields = (
@@ -66,10 +32,13 @@ class LecturePhotoSerializer(serializers.ModelSerializer):
 class LectureListSerializer(serializers.ModelSerializer):
     locations = ClassLocationSerializer(many=True, read_only=True)
     lecture_photos = LecturePhotoSerializer(many=True, read_only=True)
+    reviews = ReviewSerializer(many=True, read_only=True)
 
     class Meta:
         model = Lecture
         fields = (
+            'id',
+            'tutor',
             'title',
             'category',
             'class_type',
@@ -89,9 +58,7 @@ class LectureListSerializer(serializers.ModelSerializer):
 
             'locations',
             'lecture_photos',
-        )
-        read_only_fields = (
-            'totur',
+            'reviews'
         )
 
 

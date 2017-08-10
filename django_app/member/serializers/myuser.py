@@ -1,15 +1,12 @@
 from django.contrib.auth import get_user_model, authenticate
+from django.http import HttpResponse
 from rest_framework import serializers, exceptions
 from rest_framework.authtoken.models import Token
-from django.utils.translation import ugettext_lazy as _
-from rest_framework.response import Response
 
 MyUser = get_user_model()
 
 
-class MyUserSerializer(serializers.ModelSerializer):
-    # enrollments = serializers.PrimaryKeyRelatedField(many=True, read_only=True,)
-    # user_token =
+class MyUserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyUser
@@ -22,7 +19,8 @@ class MyUserSerializer(serializers.ModelSerializer):
         )
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class MyUserSerializer(serializers.ModelSerializer):
+    """회원가입, 마이페이지 조회/수정/삭제"""
     password = serializers.CharField(label='Password', write_only=True)
     confirm_password = serializers.CharField(label='Confirm Password', write_only=True)
 
@@ -41,25 +39,21 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return MyUser.objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
-        print('update')
-        print(validated_data)
         instance.username = validated_data.get('username', instance.username)
-        # instance.password = validated_data.get('password', instance.password)
         instance.email = validated_data.get('email', instance.email)
         instance.phone = validated_data.get('phone', instance.phone)
         instance.my_photo = validated_data.get('my_photo', instance.my_photo)
-
         password = validated_data.get('password', None)
+
         instance.set_password(password)
 
         instance.save()
         return instance
 
     def validate(self, data):
-        print('음?')
         if data['password'] and data['password'] != data['confirm_password']:
             raise serializers.ValidationError('비밀번호가 서로 일치하지 않습니다.')
-
+        data.pop('confirm_password')
         return data
 
 
