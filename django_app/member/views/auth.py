@@ -48,7 +48,6 @@ class LoginView(APIView):
     def post(self, request, format=None):
         data = request.data.copy()
         data['user_type'] = 'd'
-        print(data)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             ret = serializer.validated_data
@@ -151,7 +150,6 @@ class MyProfileView(APIView):
         serializer = MyUserSerializer(user, data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            print('I want to pass this validation test!')
         return Response(serializer.data)
 
     def delete(self, request, user_pk, format=None):

@@ -18,13 +18,9 @@ class TutorRegister(APIView):
         serializer = TutorRegisterSerializer(data=request.data)
 
         user = MyUser.objects.get(pk=request.user.id)
-        print(request.user)
-        print(serializer.is_valid())
 
         if serializer.is_valid(raise_exception=True):
-            print(serializer.data)
             instance = serializer.validated_data
-            print("instance:", instance)
             user.info_update(
                 my_photo=instance['my_photo'],
                 nickname=instance['nickname'],
