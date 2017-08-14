@@ -150,7 +150,6 @@ class MyProfileView(APIView):
         serializer = MyUserSerializer(user, data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            print('I want to pass this validation test!')
         return Response(serializer.data)
 
     def delete(self, request, user_pk, format=None):
