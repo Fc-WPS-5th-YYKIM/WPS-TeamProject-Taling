@@ -30,7 +30,7 @@ class Tutor(models.Model):
     )
 
     cert_type = models.CharField(
-        max_length=1,
+        max_length=8,
         choices=CERT_TYPE_CHOICE,
     )
 
@@ -45,7 +45,7 @@ class Tutor(models.Model):
     )
 
     status_type = models.CharField(
-        max_length=1,
+        max_length=10,
         choices=STATUS_TYPE_CHOICE,
         null=True,
     )
