@@ -38,11 +38,9 @@ class MyUserSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        print('Create')
         return MyUser.objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
-        print('Update')
 
         # 모델 시리얼라이즈이므로 불필요한 사항?
         instance.email = validated_data.get('email', instance.email)
@@ -56,7 +54,6 @@ class MyUserSerializer(serializers.ModelSerializer):
         return instance
 
     def validate(self, data):
-        print(data)
         if data['password'] and data['password'] != data['confirm_password']:
             raise serializers.ValidationError('비밀번호가 서로 일치하지 않습니다.')
 

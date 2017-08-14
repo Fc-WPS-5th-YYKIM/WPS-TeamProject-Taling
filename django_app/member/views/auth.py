@@ -48,7 +48,6 @@ class LoginView(APIView):
     def post(self, request, format=None):
         data = request.data.copy()
         data['user_type'] = 'd'
-        print(data)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             ret = serializer.validated_data
