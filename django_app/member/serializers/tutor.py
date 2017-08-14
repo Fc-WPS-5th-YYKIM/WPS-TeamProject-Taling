@@ -36,23 +36,18 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
         )
 
     def validate_my_photo(self, data):
-        print(data)
         return data
 
     def validate_nickname(self, data):
-        print(data)
         return data
 
     def validate_phone(self, data):
-        print(data)
         return data
 
     def validate_cert_name(self, data):
-        print(data)
         return data
 
     def validate_cert_photo(self, data):
-        print(data)
         return data
 
     def validate(self, data):
