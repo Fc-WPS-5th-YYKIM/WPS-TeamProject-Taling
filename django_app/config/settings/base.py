@@ -22,19 +22,9 @@ CONFIG_SECRET_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.jso
 CONFIG_SECRET_DEBUG_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_debug.json')
 CONFIG_SECRET_DEPLOY_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_deploy.json')
 
-# config_secret변수에 CONFIG_SECRET_COMMON_FILE경로의 파일을 읽은 값을
-# json.loads를 이용해 파이썬 객체로 바꾼형태로 할당
 
-# f = open(CONFIG_SECRET_COMMON_FILE)
-# config_secret_string = f.read()
-# config_secret = json.loads(config_secret_string)
-# f.close()
 config_secret_common = json.loads(open(CONFIG_SECRET_COMMON_FILE).read())
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config_secret_common['django']['secret_key']
 
 FACEBOOK_APP_ID = '352609101838188'
@@ -140,6 +130,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
+STATIC_URL = '/static/'
 
 # Custom User (default: auth.User)
 AUTH_USER_MODEL = 'member.MyUser'
