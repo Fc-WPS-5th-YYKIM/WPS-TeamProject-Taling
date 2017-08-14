@@ -8,6 +8,7 @@ class ClassLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClassLocation
         fields = (
+            'id',
             'location1',
             'location2',
             'location_option',
@@ -23,6 +24,7 @@ class LecturePhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = LecturePhoto
         fields = (
+            'id',
             'photo_type',
             'photo',
             'description',
@@ -97,6 +99,49 @@ class LectureMakeSerializer(serializers.ModelSerializer):
     description = serializers.ListField(
         child=serializers.CharField(),
     )
+
+    def save(self, tutor, **kwargs):
+        lecture, lecture_created = Lecture.objects.get_or_create(
+            tutor=tutor,
+            title=self.validated_data['title'],
+            category=self.validated_data['category'],
+            class_type=self.validated_data['class_type'],
+            min_member=self.validated_data['min_member'],
+            max_member=self.validated_data['max_member'],
+            cover_photo=self.validated_data['cover_photo'],
+            tutor_intro=self.validated_data['tutor_intro'],
+            class_intro=self.validated_data['class_intro'],
+            target_intro=self.validated_data['target_intro'],
+            price=self.validated_data['price'],
+            basic_class_time=self.validated_data['basic_class_time'],
+            total_count=self.validated_data['total_count'],
+            youtube_url1=self.validated_data['youtube_url1'],
+            youtube_url2=self.validated_data['youtube_url2'],
+            region_comment=self.validated_data['region_comment'],
+            notice=self.validated_data['notice'],
+        )
+
+        if lecture_created:
+            for i in range(len(self.validated_data['location1'])):
+                ClassLocation.objects.get_or_create(
+                    lecture=lecture,
+                    location1=self.validated_data['location1'][i],
+                    location2=self.validated_data['location2'][i],
+                    location_option=self.validated_data['location_option'][i],
+                    location_detail=self.validated_data['location_detail'][i],
+                    location_etc_type=self.validated_data['location_etc_type'][i],
+                    location_etc_text=self.validated_data['location_etc_text'][i],
+                    class_weekday=self.validated_data['class_weekday'][i],
+                    class_time=self.validated_data['class_time'][i],
+                )
+
+            for j in range(len(self.validated_data['photo_type'])):
+                LecturePhoto.objects.get_or_create(
+                    lecture=lecture,
+                    photo_type=self.validated_data['photo_type'][j],
+                    photo=self.validated_data['photo'][j],
+                    description=self.validated_data['description'][j],
+                )
 
     class Meta:
         model = Lecture

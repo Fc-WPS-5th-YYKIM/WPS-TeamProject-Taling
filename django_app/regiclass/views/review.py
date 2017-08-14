@@ -8,7 +8,8 @@ from regiclass.serializers import ReviewSerializer
 
 MyUser = get_user_model()
 
-class ReviewMake(APIView):
+
+class Review(APIView):
     serializer_class = ReviewSerializer
 
     def post(self, request, *args, **kwargs):
@@ -20,11 +21,7 @@ class ReviewMake(APIView):
             return Response({'result': status.HTTP_201_CREATED})
         return Response({'result': status.HTTP_400_BAD_REQUEST})
 
-
-class ReviewList(APIView):
-    serializer_class = ReviewSerializer
-
     def get(self, request):
-       review_list = Review.objects.filter().order_by('-modify_date')[:5]
-       serializer = self.serializer_class(review_list, many=True)
-       return Response(serializer.data)
+        review_list = Review.objects.filter().order_by('-modify_date')[:5]
+        serializer = self.serializer_class(review_list, many=True)
+        return Response(serializer.data)

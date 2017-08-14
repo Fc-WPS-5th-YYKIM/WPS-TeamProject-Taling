@@ -13,7 +13,8 @@ class LecturePhoto(models.Model):
     )
     lecture = models.ForeignKey(
         Lecture,
-        on_delete=models.CASCADE
+        related_name='lecture_photos',
+        on_delete=models.CASCADE,
     )
     photo_type = models.CharField(
         max_length=10,
