@@ -64,11 +64,11 @@ class Lecture(models.Model):
         max_length=30,
     )
     category = models.CharField(
-        max_length=1,
+        max_length=10,
         choices=CATEGORY_CHOICE,
     )
     class_type = models.CharField(
-        max_length=1,
+        max_length=10,
         choices=CLASS_TYPE_CHOICE,
     )
     min_member = models.CharField(
@@ -97,10 +97,10 @@ class Lecture(models.Model):
         max_length=10,
     )
     basic_class_time = models.CharField(
-        max_length=1,
+        max_length=10,
     )
     total_count = models.CharField(
-        max_length=1,
+        max_length=10,
     )
     youtube_url1 = models.CharField(
         max_length=100,
@@ -121,7 +121,7 @@ class Lecture(models.Model):
         null=True,
     )
     state = models.CharField(
-        max_length=8,
+        max_length=10,
         choices=STATE_CHOICE,
         default=STATE_EDITING,
     )
