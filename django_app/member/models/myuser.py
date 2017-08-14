@@ -14,19 +14,18 @@ __all__ = (
 
 class MyUserManager(DefaultUserManager):
     def get_or_create_facebook_user(self, user_info):
-        print(user_info)
         username = '{}_{}_{}'.format(
             self.model.USER_TYPE_FACEBOOK,
             settings.FACEBOOK_APP_ID,
             user_info['id'],
         )
-        print(username)
         user, user_created = self.get_or_create(
             username=username,
             email=user_info.get('email'),
             user_type=self.model.USER_TYPE_FACEBOOK,
             defaults={
                 'email': user_info.get('email', ''),
+                'my_photo': user_info['picture']['data'].get('url', '뭥미'),
             }
         )
         return user
@@ -67,6 +66,8 @@ class MyUser(AbstractUser):
     user_token = models.ManyToManyField(Token)
 
     objects = MyUserManager()
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='my_profile', null=True)
 
     def info_update(self, **kwargs):
         self.my_photo = kwargs.get('my_photo', '')
