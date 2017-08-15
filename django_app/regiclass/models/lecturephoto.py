@@ -2,6 +2,10 @@ from django.db import models
 
 from regiclass.models import Lecture
 
+__all__ = (
+    'LecturePhoto',
+)
+
 
 class LecturePhoto(models.Model):
     PHOTO_TYPE_INFO = 'info'

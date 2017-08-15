@@ -8,10 +8,14 @@ from member.serializers import TutorRegisterSerializer
 
 MyUser = get_user_model()
 
+__all__ = (
+    'TutorRegister',
+)
+
 
 class TutorRegister(APIView):
-
     serializer_class = TutorRegisterSerializer
+
     # permission_classes =
 
     def post(self, request):
@@ -36,7 +40,6 @@ class TutorRegister(APIView):
             )
 
             for i in range(len(instance['cert_name'])):
-
                 Certification.objects.get_or_create(
                     tutor=tutor,
                     cert_name=instance['cert_name'][i],
@@ -44,5 +47,3 @@ class TutorRegister(APIView):
                 )
 
         return HttpResponse('helloworld')
-
-

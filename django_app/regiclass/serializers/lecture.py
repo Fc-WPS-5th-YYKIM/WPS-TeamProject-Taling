@@ -1,7 +1,16 @@
+from django.db.models import Sum, Avg
 from rest_framework import serializers
 
 from regiclass.models import Lecture, ClassLocation, LecturePhoto
 from regiclass.serializers import ReviewSerializer
+
+__all__ = (
+    'ClassLocationSerializer',
+    'LecturePhotoSerializer',
+    'LectureListSerializer',
+    'LectureMakeSerializer',
+
+)
 
 
 class ClassLocationSerializer(serializers.ModelSerializer):
@@ -57,11 +66,37 @@ class LectureListSerializer(serializers.ModelSerializer):
             'youtube_url2',
             'region_comment',
             'notice',
+            'like_users',
+            'state',
+            'modify_date',
 
             'locations',
             'lecture_photos',
             'reviews'
         )
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        user = self.context['user']
+        if user.is_authenticated:
+            ret['is_like'] = instance.likelecture_set.filter(user=user, lecture=instance.id).exists()
+        ret['like_count'] = instance.likelecture_set.count()
+        ret['review_count'] = instance.reviews.count()
+        ret['review_average'] = instance.reviews.filter(lecture=instance.id).aggregate(
+                                                                            curriculum_rate=Avg('curriculum_rate'),
+                                                                            delivery_rate=Avg('delivery_rate'),
+                                                                            preparation_rate=Avg('preparation_rate'),
+                                                                            kindness_rate=Avg('kindness_rate'),
+                                                                            punctually_rate=Avg('punctually_rate')
+                                                                        )
+        ret['review_sum'] = instance.reviews.filter(lecture=instance.id).aggregate(
+                                                                            curriculum_rate=Sum('curriculum_rate'),
+                                                                            delivery_rate=Sum('delivery_rate'),
+                                                                            preparation_rate=Sum('preparation_rate'),
+                                                                            kindness_rate=Sum('kindness_rate'),
+                                                                            punctually_rate=Sum('punctually_rate')
+                                                                        )
+        return ret
 
 
 class LectureMakeSerializer(serializers.ModelSerializer):

@@ -5,6 +5,10 @@ from regiclass.models import Lecture
 
 MyUser = get_user_model()
 
+__all__ = (
+    'Review',
+)
+
 
 class Review(models.Model):
     lecture = models.ForeignKey(
@@ -41,3 +45,6 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['-modify_date']
+
+    def __str__(self):
+        return '{}, {}, {}, {}, {}'.format(self.curriculum_rate, self.delivery_rate, self.preparation_rate, self.kindness_rate, self.punctually_rate)

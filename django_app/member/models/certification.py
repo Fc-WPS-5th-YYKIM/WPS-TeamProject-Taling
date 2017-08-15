@@ -1,6 +1,10 @@
 from django.db import models
 from . import Tutor
 
+__all__ = (
+    'Certification',
+)
+
 
 class Certification(models.Model):
     tutor = models.ForeignKey(Tutor)

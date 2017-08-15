@@ -5,6 +5,10 @@ from member.models import Tutor, Certification
 
 MyUser = get_user_model()
 
+__all__ = (
+    'TutorRegisterSerializer',
+)
+
 
 class TutorRegisterSerializer(serializers.ModelSerializer):
     # basic_info = MyUserUpdateSerializer(many=False)

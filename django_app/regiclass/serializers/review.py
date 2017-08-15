@@ -2,6 +2,10 @@ from rest_framework import serializers
 
 from regiclass.models import Review
 
+__all__ = (
+    'ReviewSerializer',
+)
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
