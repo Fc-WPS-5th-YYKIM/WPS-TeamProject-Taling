@@ -19,24 +19,19 @@ class Review(models.Model):
     author = models.ForeignKey(
         MyUser,
     )
-    curriculum_rate = models.CharField(
-        max_length=1,
+    curriculum_rate = models.IntegerField(
         default=0,
     )
-    delivery_rate = models.CharField(
-        max_length=1,
+    delivery_rate = models.IntegerField(
         default=0,
     )
-    preparation_rate = models.CharField(
-        max_length=1,
+    preparation_rate = models.IntegerField(
         default=0,
     )
-    kindness_rate = models.CharField(
-        max_length=1,
+    kindness_rate = models.IntegerField(
         default=0,
     )
-    punctually_rate = models.CharField(
-        max_length=1,
+    punctually_rate = models.IntegerField(
         default=0,
     )
     content = models.TextField()
