@@ -83,19 +83,19 @@ class LectureListSerializer(serializers.ModelSerializer):
         ret['like_count'] = instance.likelecture_set.count()
         ret['review_count'] = instance.reviews.count()
         ret['review_average'] = instance.reviews.filter(lecture=instance.id).aggregate(
-                                                                            curriculum_rate=Avg('curriculum_rate'),
-                                                                            delivery_rate=Avg('delivery_rate'),
-                                                                            preparation_rate=Avg('preparation_rate'),
-                                                                            kindness_rate=Avg('kindness_rate'),
-                                                                            punctually_rate=Avg('punctually_rate')
-                                                                        )
+            curriculum_rate=Avg('curriculum_rate'),
+            delivery_rate=Avg('delivery_rate'),
+            preparation_rate=Avg('preparation_rate'),
+            kindness_rate=Avg('kindness_rate'),
+            punctually_rate=Avg('punctually_rate')
+        )
         ret['review_sum'] = instance.reviews.filter(lecture=instance.id).aggregate(
-                                                                            curriculum_rate=Sum('curriculum_rate'),
-                                                                            delivery_rate=Sum('delivery_rate'),
-                                                                            preparation_rate=Sum('preparation_rate'),
-                                                                            kindness_rate=Sum('kindness_rate'),
-                                                                            punctually_rate=Sum('punctually_rate')
-                                                                        )
+            curriculum_rate=Sum('curriculum_rate'),
+            delivery_rate=Sum('delivery_rate'),
+            preparation_rate=Sum('preparation_rate'),
+            kindness_rate=Sum('kindness_rate'),
+            punctually_rate=Sum('punctually_rate')
+        )
         return ret
 
 
