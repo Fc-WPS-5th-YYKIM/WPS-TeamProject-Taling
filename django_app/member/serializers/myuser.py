@@ -6,9 +6,16 @@ from rest_framework.authtoken.models import Token
 
 MyUser = get_user_model()
 
+__all__ = (
+    'MyUserInfoSerializer',
+    'MyUserSerializer',
+    'LoginSerializer',
+    'ChangePasswordSerializer',
+    'MyUserToken',
+)
+
 
 class MyUserInfoSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = MyUser
         fields = (
@@ -41,7 +48,6 @@ class MyUserSerializer(serializers.ModelSerializer):
         return MyUser.objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
-
         # 모델 시리얼라이즈이므로 불필요한 사항?
         instance.email = validated_data.get('email', instance.email)
         instance.phone = validated_data.get('phone', instance.phone)

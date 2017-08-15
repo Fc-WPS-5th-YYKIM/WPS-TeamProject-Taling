@@ -8,6 +8,10 @@ from regiclass.serializers import ReviewSerializer
 
 MyUser = get_user_model()
 
+__all__ = (
+    'Review',
+)
+
 
 class Review(APIView):
     serializer_class = ReviewSerializer

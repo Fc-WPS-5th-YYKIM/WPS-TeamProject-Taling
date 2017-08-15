@@ -21,6 +21,18 @@ from utils import permissions
 
 MyUser = get_user_model()
 
+__all__ = (
+    'SignUpView',
+    'LoginView',
+    'FaceBookLoginView',
+    'MyProfileView',
+    'ChangePasswordView',
+    'TokenUserInfoAPIView',
+    'MyUserList',
+    'MyUserDetailView',
+)
+
+
 ##
 # view 는 '사용제에게 제공될 데이터를 보는 것을 의미한다.
 #   '데이터가 어떻게 보이는가?'에 대한 것은 필요하지 않다.
@@ -118,7 +130,7 @@ class FaceBookLoginView(APIView):
 class MyProfileView(APIView):
     """ 마이페이지 조회/수정/삭제 """
 
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     # API 뷰에 적합한 접근 제한 방식이 아니다.
     # def get(self, request, user_pk):
@@ -157,16 +169,15 @@ class MyProfileView(APIView):
         user.delete()
         return HttpResponse('Hello Delete Request')
 
-    # URL keyword argument, 기본은 pk
-    # lookup_field = 'username'
+        # URL keyword argument, 기본은 pk
+        # lookup_field = 'username'
 
-    # @method_decorator(login_required(login_url='/member/login/'))
-    # def dispatch(self, request, *args, **kwargs):
-    #     return super(ChangeMyProfileView, self).dispatch(*args, **kwargs)
+        # @method_decorator(login_required(login_url='/member/login/'))
+        # def dispatch(self, request, *args, **kwargs):
+        #     return super(ChangeMyProfileView, self).dispatch(*args, **kwargs)
 
 
 class ChangePasswordView(APIView):
-
     def patch(self, request, user_pk):
         user = MyUser.objects.get(pk=user_pk)
 
@@ -201,7 +212,6 @@ class MyUserDetailView(APIView):
 
     def post(self, request, pk=None):
         return Response(MyUserSerializer(request.user).data)
-
 
 # class MyUserViewSet(viewsets.ReadOnlyModelViewSet):
 #     """

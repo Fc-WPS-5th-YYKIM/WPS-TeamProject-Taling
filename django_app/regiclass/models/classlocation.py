@@ -2,6 +2,10 @@ from django.db import models
 
 from regiclass.models import Lecture
 
+__all__ = (
+    'ClassLocation',
+)
+
 
 class ClassLocation(models.Model):
     LOCATION_DIRECT = 'direct'

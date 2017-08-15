@@ -1,9 +1,12 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
+
+MyUser = get_user_model()
 
 __all__ = (
     'Lecture',
-    'Enrollment'
+    'LikeLecture',
 )
 
 
@@ -125,18 +128,27 @@ class Lecture(models.Model):
         choices=STATE_CHOICE,
         default=STATE_EDITING,
     )
+    like_users = models.ManyToManyField(
+        MyUser,
+        related_name='like_lecture',
+        through='LikeLecture',
+    )
     create_date = models.DateTimeField(auto_now_add=True)
     modify_date = models.DateTimeField(auto_now=True)
 
 
-class Enrollment(models.Model):
-    ##
-    # 로그인한 모든 회원에게만 수강 등록 권한이 있다.
-    ##
+class LikeLecture(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        MyUser,
         on_delete=models.CASCADE,
-        related_name='enrollment_user',
     )
+    lecture = models.ForeignKey(
+        Lecture,
+        on_delete=models.CASCADE,
+    )
+    create_date = models.DateTimeField(auto_now_add=True)
 
-    lecture = models.ForeignKey(Lecture)
+    class Meta:
+        unique_together = (
+            ('user', 'lecture'),
+        )
