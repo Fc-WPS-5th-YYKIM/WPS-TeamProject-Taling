@@ -42,6 +42,9 @@ class MyUser(AbstractUser):
         max_length=13,
         blank=True,
     )
+    name = models.CharField(
+        max_length=12,
+    )
 
     ##
     # 유저타입. 기본은 Django, 페이스북 로그인 시 USER_TYPE_FACEBOOK 값을 갖는다.
@@ -60,7 +63,12 @@ class MyUser(AbstractUser):
         related_name='enroll_lectures',
     )
 
-    nickname = models.CharField(max_length=20, null=True, blank=True)
+    nickname = models.CharField(
+        max_length=24,
+        null=True,
+        blank=True,
+        unique=True,
+    )
 
     user_token = models.ManyToManyField(Token)
 

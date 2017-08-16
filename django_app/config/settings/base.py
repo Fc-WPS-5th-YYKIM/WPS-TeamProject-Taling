@@ -144,3 +144,7 @@ REST_FRAMEWORK = {
     )
 }
 
+
+ALLOW_UNICODE_SLUGS = True
+
+

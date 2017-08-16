@@ -1,7 +1,14 @@
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
 
-from member.models import MyUser
+from django.db.models import permalink
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
+from rest_framework.reverse import reverse
+
+from unidecode import unidecode
+
+MyUser = get_user_model()
 
 
 class Tutor(models.Model):
@@ -54,6 +61,43 @@ class Tutor(models.Model):
         upload_to='user/%Y/%m/%d',
         null=True,
     )
+
+    ##
+    # 슬러그 생성
+    ##
+    slug = models.SlugField(
+        unique=True,
+        blank=True,
+        db_index=True,
+        allow_unicode=True,
+    )
+
+    # @permalink
+    # def get_absolute_url(self):
+    #     return reverse("member:detail", (), {
+    #       'pk': self.pk,
+    #       'slug': self.slug,
+    #     })
+
+
+def create_slug(instance, new_slug=None):
+    slug = slugify('tutor-' + unidecode(instance.author.nickname))
+    if new_slug is not None:
+        slug = new_slug
+    qs = Tutor.objects.filter(slug=slug).order_by("-id")
+    exists = qs.exists()
+    if exists:
+        new_slug = '{}-{}'.format(slug, qs.first().id)
+        return create_slug(instance, new_slug=new_slug)
+    return slug
+
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = create_slug(instance)
+
+
+pre_save.connect(pre_save_post_receiver, sender=Tutor)
 
     ##
     # 앱에서 요구하는 필드
