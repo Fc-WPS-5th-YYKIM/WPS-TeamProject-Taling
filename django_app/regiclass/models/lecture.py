@@ -1,8 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
-
-MyUser = get_user_model()
 
 __all__ = (
     'Lecture',
@@ -129,7 +126,7 @@ class Lecture(models.Model):
         default=STATE_EDITING,
     )
     like_users = models.ManyToManyField(
-        MyUser,
+        settings.AUTH_USER_MODEL,
         related_name='like_lecture',
         through='LikeLecture',
     )
@@ -138,80 +135,5 @@ class Lecture(models.Model):
 
 
 class LikeLecture(models.Model):
-    user = models.ForeignKey(MyUser)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     lecture = models.ForeignKey(Lecture)
-
-
-class Enrollment(models.Model):
-    class Meta:
-        unique_together = (
-            ('user', 'lecture'),
-        )
-
-    user = models.ForeignKey(
-        MyUser,
-        on_delete=models.CASCADE,
-    )
-    lecture = models.ForeignKey(
-        Lecture,
-        on_delete=models.CASCADE,
-    )
-    create_date = models.DateTimeField(auto_now_add=True)
-
-    lecture = models.ForeignKey(
-        Lecture,
-        on_delete=models.CASCADE,
-        related_name='enrollment_lecture',
-    )
-
-    location = models.CharField(
-        max_length=12,
-        blank=True,
-    )
-
-    time = models.CharField(
-        max_length=48,
-        blank=True,
-    )
-
-    LEVEL_BEGINNER = 'beginner'
-    LEVEL_INTERMEDIATE = 'intermediate'
-    LEVEL_ADVANCED = 'advanced'
-
-    LEVEL_CHOICE = (
-        (LEVEL_BEGINNER, '입문자'),
-        (LEVEL_INTERMEDIATE, '초중급자'),
-        (LEVEL_ADVANCED, '상급자'),
-    )
-
-    level = models.CharField(
-        max_length=12,
-        choices=LEVEL_CHOICE,
-        blank=True,
-    )
-
-    career = models.CharField(max_length=36, blank=True,)
-    to_tutor = models.TextField(blank=True,)
-    created_at = models.DateTimeField(auto_now_add=True,)
-    modified_at = models.DateTimeField(auto_now=True,)
-
-    PAY_METHOD_CREDIT = 'credit'
-    PAY_METHOD_BANKBOOK = 'bankbook'
-
-    PAY_METHOD_CHOICE = (
-        (PAY_METHOD_CREDIT, '신용카드'),
-        (PAY_METHOD_BANKBOOK, '무통장입금'),
-    )
-
-    pay_method = models.CharField(
-        max_length=12,
-        choices=PAY_METHOD_CHOICE,
-        blank=True,
-    )
-
-    remitter = models.CharField(
-        max_length=24,
-        blank=True,
-    )
-
-    due_date = models.DateTimeField(blank=True,)

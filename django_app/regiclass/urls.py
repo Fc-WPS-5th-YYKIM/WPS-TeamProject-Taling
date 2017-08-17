@@ -12,5 +12,4 @@ urlpatterns = [
     url(r'^review/list/$', views.Review.as_view(), name='list_review'),
 
     url(r'^talent/guide/(?P<slug>[-\w\d]+)/$', views.TalenteGuideView.as_view(), name='talent-guide'),
-
 ]

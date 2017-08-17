@@ -2,12 +2,13 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as DefaultUserManager
 from django.db import models
 
+from regiclass.models import Lecture
 from utils import CustomImageField
 
 from rest_framework.authtoken.models import Token
 
 __all__ = (
-    'MyUser'
+    'MyUser',
 )
 
 
@@ -35,15 +36,25 @@ class MyUser(AbstractUser):
         upload_to='user/%Y/%m/%d',
         blank=True,
     )
+
     email = models.EmailField(
         blank=True,
     )
+
     phone = models.CharField(
         max_length=13,
         blank=True,
     )
+
     name = models.CharField(
         max_length=12,
+    )
+
+    nickname = models.CharField(
+        max_length=24,
+        null=True,
+        blank=True,
+        unique=True,
     )
 
     ##
@@ -58,23 +69,14 @@ class MyUser(AbstractUser):
     user_type = models.CharField(max_length=1, choices=USER_TYPE_CHOICES, default=USER_TYPE_DJANGO)
 
     enrollments = models.ManyToManyField(
-        'regiclass.Lecture',
-        through='Enrollment',
+        Lecture,
+        through='regiclass.Enrollment',
         related_name='enroll_lectures',
-    )
-
-    nickname = models.CharField(
-        max_length=24,
-        null=True,
-        blank=True,
-        unique=True,
     )
 
     user_token = models.ManyToManyField(Token)
 
     objects = MyUserManager()
-
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='my_profile', null=True)
 
     def info_update(self, **kwargs):
         self.my_photo = kwargs.get('my_photo', '')
@@ -84,16 +86,3 @@ class MyUser(AbstractUser):
 
     def get_user_token(self, user_pk):
         return Token.objects.get_or_create(user_id=user_pk)
-
-
-class Enrollment(models.Model):
-    ##
-    # 로그인한 모든 회원에게만 수강 등록 권한이 있다.
-    ##
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='enrollment_user',
-    )
-
-    lecture = models.ForeignKey('regiclass.Lecture')
