@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.db import models
 
-from member.models import MyUser
-
 
 class Tutor(models.Model):
     CERT_TYPE_UNIV = 'univ'
@@ -25,7 +23,7 @@ class Tutor(models.Model):
     )
 
     author = models.OneToOneField(
-        MyUser,
+        settings.AUTH_USER_MODEL,
         related_name='myuser',
     )
 
