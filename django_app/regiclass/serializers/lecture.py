@@ -96,6 +96,9 @@ class LectureListSerializer(serializers.ModelSerializer):
             kindness_rate=Sum('kindness_rate'),
             punctually_rate=Sum('punctually_rate')
         )
+        ret['tutor_info'] = {
+            'nickname': instance.tutor.author.nickname,
+        }
         return ret
 
 
