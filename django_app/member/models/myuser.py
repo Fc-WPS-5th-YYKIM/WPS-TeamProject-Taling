@@ -43,6 +43,10 @@ class MyUser(AbstractUser):
         blank=True,
     )
 
+    name = models.CharField(
+        max_length=12,
+    )
+
     ##
     # 유저타입. 기본은 Django, 페이스북 로그인 시 USER_TYPE_FACEBOOK 값을 갖는다.
     ##
@@ -56,7 +60,7 @@ class MyUser(AbstractUser):
 
     enrollments = models.ManyToManyField(
         'regiclass.Lecture',
-        through='Enrollment',
+        through='regiclass.Enrollment',
         related_name='enroll_lectures',
     )
 
@@ -66,8 +70,6 @@ class MyUser(AbstractUser):
 
     objects = MyUserManager()
 
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='my_profile', null=True)
-
     def info_update(self, **kwargs):
         self.my_photo = kwargs.get('my_photo', '')
         self.nickname = kwargs['nickname']
@@ -76,16 +78,3 @@ class MyUser(AbstractUser):
 
     def get_user_token(self, user_pk):
         return Token.objects.get_or_create(user_id=user_pk)
-
-
-class Enrollment(models.Model):
-    ##
-    # 로그인한 모든 회원에게만 수강 등록 권한이 있다.
-    ##
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='enrollment_user',
-    )
-
-    lecture = models.ForeignKey('regiclass.Lecture')
