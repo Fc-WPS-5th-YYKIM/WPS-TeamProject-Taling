@@ -10,7 +10,7 @@ COPY            . /srv/taling
 WORKDIR         /srv/taling
 
 # requirements 설치 ( debug.txt 에 기록해 둔 pip list 를 모두 install )
-RUN             /root/.pyenv/versions/taling/bin/pip install -r .requirements/debug.txt
+RUN             /root/.pyenv/versions/taling/bin/pip install -r .requirements/deploy.txt
 
 # supervisor 파일 복사
 COPY            .config/supervisor/uwsgi.conf /etc/supervisor/conf.d/
