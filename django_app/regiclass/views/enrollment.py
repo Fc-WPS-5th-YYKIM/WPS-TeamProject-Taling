@@ -115,3 +115,23 @@ class ClassPaymentView(APIView):
             serializer.save()
             return Response('성공', status=status.HTTP_201_CREATED)
         return HttpResponse('실패', status=status.HTTP_400_BAD_REQUEST)
+
+
+class ApplyMyTalentView2(APIView):
+    def get(self, request, slug):
+        lecture = Lecture.objects.get(slug=slug)
+        tutor = lecture.tutor
+        ret = {
+            'tutor_nickname': tutor.author.nickname
+        }
+        return Response(ret)
+
+    def put(self, request, slug):
+        lecture = Lecture.objects.get(slug=slug)
+        enrollment = Enrollment.objects.get(lecture=lecture)
+        serializer = ApplyMyTalentSerializer(enrollment, data=request.data, partial=True)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response('성공', status=status.HTTP_201_CREATED)
+        return HttpResponse('실패', status=status.HTTP_400_BAD_REQUEST)
