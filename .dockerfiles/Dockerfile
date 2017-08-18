@@ -10,7 +10,7 @@ COPY            . /srv/taling
 WORKDIR         /srv/taling
 
 # requirements 설치 ( debug.txt 에 기록해 둔 pip list 를 모두 install )
-RUN             /root/.pyenv/versions/taling/bin/pip install -r .requirements/deploy.txt
+RUN             /root/.pyenv/versions/taling/bin/pip install -r .requirements/debug.txt
 
 # supervisor 파일 복사
 COPY            .config/supervisor/uwsgi.conf /etc/supervisor/conf.d/
@@ -21,7 +21,7 @@ COPY            .config/nginx/nginx-app.conf /etc/nginx/sites-available/nginx-ap
 RUN             rm -rf /etc/nginx/sites-enabled/default
 RUN             ln -sf /etc/nginx/sites-available/nginx-app.conf /etc/nginx/sites-enabled/nginx-app.conf
 
-# collectstatic 실행
+# collectstatic 실행:
 RUN             /root/.pyenv/versions/taling/bin/python /srv/taling/django_app/manage.py collectstatic --settings=config.settings.deploy --noinput
 
 CMD             supervisord -n
