@@ -9,11 +9,11 @@ from regiclass.serializers import ReviewSerializer
 MyUser = get_user_model()
 
 __all__ = (
-    'Review',
+    'Reviews',
 )
 
 
-class Review(APIView):
+class Reviews(APIView):
     serializer_class = ReviewSerializer
 
     def post(self, request, *args, **kwargs):
