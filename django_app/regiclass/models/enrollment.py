@@ -21,8 +21,6 @@ class Enrollment(models.Model):
         related_name='enrollment_lecture',
     )
 
-    create_date = models.DateTimeField(auto_now_add=True)
-
     location = models.CharField(max_length=24)
     class_day = models.CharField(max_length=8)
     class_time = models.CharField(max_length=24)
@@ -66,5 +64,5 @@ class Enrollment(models.Model):
         max_length=24,
         blank=True,
     )
-
     due_date = models.CharField(max_length=36, blank=True, null=True)
+

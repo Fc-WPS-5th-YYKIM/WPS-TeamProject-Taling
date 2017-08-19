@@ -26,6 +26,6 @@ class Review(APIView):
         return Response({'result': status.HTTP_400_BAD_REQUEST})
 
     def get(self, request):
-        review_list = Review.objects.filter().order_by('-modify_date')[:5]
+        review_list = Review.objects.filter().order_by('-modify_date')[:4]
         serializer = self.serializer_class(review_list, many=True)
         return Response(serializer.data)

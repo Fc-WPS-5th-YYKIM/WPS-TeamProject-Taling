@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import APIException
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -208,10 +209,11 @@ class MyUserList(generics.ListCreateAPIView):
 
 
 class MyUserDetailView(APIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
-    def post(self, request, pk=None):
-        return Response(MyUserSerializer(request.user).data)
+    def get(self, request, slug):
+        user = get_object_or_404(MyUser, slug=slug)
+        return Response(MyUserSerializer(user).data)
 
 # class MyUserViewSet(viewsets.ReadOnlyModelViewSet):
 #     """

@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from member.models import Tutor, Certification
 from member.serializers import TutorRegisterSerializer
+from utils.permissions import IsOwnerOrReadOnly
 
 MyUser = get_user_model()
 
@@ -15,8 +15,7 @@ __all__ = (
 
 class TutorRegister(APIView):
     serializer_class = TutorRegisterSerializer
-
-    # permission_classes =
+    permission_classes = (IsOwnerOrReadOnly, )
 
     def post(self, request):
         serializer = TutorRegisterSerializer(data=request.data)

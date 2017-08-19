@@ -39,6 +39,8 @@ class MyUserSerializer(serializers.ModelSerializer):
             'username',
             'password',
             'confirm_password',
+            'name',
+            'nickname',
             'email',
             'phone',
             'my_photo',
@@ -49,6 +51,8 @@ class MyUserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         # 모델 시리얼라이즈이므로 불필요한 사항?
+        instance.name = validated_data.get('name', instance.name)
+        instance.nickname = validated_data.get('nickname', instance.nickname)
         instance.email = validated_data.get('email', instance.email)
         instance.phone = validated_data.get('phone', instance.phone)
         instance.my_photo = validated_data.get('my_photo', instance.my_photo)
@@ -69,6 +73,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
+    """ 로그인 """
     username = serializers.CharField(max_length=36, write_only=True)
     password = serializers.CharField(max_length=64, write_only=True)
     user_type = serializers.CharField(max_length=1, )
@@ -89,6 +94,7 @@ class LoginSerializer(serializers.Serializer):
         ret = {
             'token': token.key,
             'user': {
+                'user_pk': user.pk,
                 'username': username,
                 'nickname': user.nickname,
             }
@@ -105,6 +111,8 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = (
             'username',
+            'name',
+            'nickname',
             'email',
             'phone',
             'my_photo',

@@ -2,12 +2,13 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as DefaultUserManager
 from django.db import models
 
+from regiclass.models import Lecture
 from utils import CustomImageField
 
 from rest_framework.authtoken.models import Token
 
 __all__ = (
-    'MyUser'
+    'MyUser',
 )
 
 
@@ -35,9 +36,11 @@ class MyUser(AbstractUser):
         upload_to='user/%Y/%m/%d',
         blank=True,
     )
+
     email = models.EmailField(
         blank=True,
     )
+
     phone = models.CharField(
         max_length=13,
         blank=True,
@@ -45,6 +48,13 @@ class MyUser(AbstractUser):
 
     name = models.CharField(
         max_length=12,
+    )
+
+    nickname = models.CharField(
+        max_length=24,
+        null=True,
+        blank=True,
+        unique=True,
     )
 
     ##
@@ -63,8 +73,6 @@ class MyUser(AbstractUser):
         through='regiclass.Enrollment',
         related_name='enroll_lectures',
     )
-
-    nickname = models.CharField(max_length=20, null=True, blank=True)
 
     user_token = models.ManyToManyField(Token)
 

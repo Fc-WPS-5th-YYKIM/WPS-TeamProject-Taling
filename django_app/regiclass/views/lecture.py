@@ -70,8 +70,10 @@ class LectureDetail(APIView):
             lecture = get_object_or_404(Lecture, pk=lecture_id)
         except Lecture.DoesNotExist:
             return Response({'result': '해당하는 강의 정보가 없습니다.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response(lecture_id)
+        serializer = self.serializer_class(lecture, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
 
 
 class LikeLecture(APIView):
