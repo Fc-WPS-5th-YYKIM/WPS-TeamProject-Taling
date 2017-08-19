@@ -30,8 +30,6 @@ urlpatterns = [
     url(r'^regiclass/', include('regiclass.urls')),
 
     url(r'^token-user-info/', TokenUserInfoAPIView.as_view()),
-    url(r'^user/info/(?P<pk>\d+)/', MyUserDetailView.as_view()),
-    url(r'^user/info/', MyUserDetailView.as_view()),
 
     # url(r'^api-token-auth/', views.obtain_auth_token),
 ]
