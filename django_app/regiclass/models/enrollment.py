@@ -3,6 +3,7 @@ from django.db import models
 
 from regiclass.models import Lecture
 
+
 class Enrollment(models.Model):
     class Meta:
         unique_together = (
@@ -13,13 +14,16 @@ class Enrollment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    create_date = models.DateTimeField(auto_now_add=True)
 
     lecture = models.ForeignKey(
         Lecture,
         on_delete=models.CASCADE,
         related_name='enrollment_lecture',
     )
+
+    location = models.CharField(max_length=24)
+    class_day = models.CharField(max_length=8)
+    class_time = models.CharField(max_length=24)
 
     LEVEL_BEGINNER = 'beginner'
     LEVEL_INTERMEDIATE = 'intermediate'
@@ -60,5 +64,5 @@ class Enrollment(models.Model):
         max_length=24,
         blank=True,
     )
+    due_date = models.CharField(max_length=36, blank=True, null=True)
 
-    due_date = models.DateTimeField(blank=True,)

@@ -20,12 +20,12 @@ class Review(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             user = MyUser.objects.get(pk=request.user.id)
-            lecture = Lecture.objects.get(pk=request.POST.get('lecture'))
+            lecture = Lecture.objects.get(pk=request.POST.get('lecture_id'))
             serializer.save(author=user, lecture=lecture)
             return Response({'result': status.HTTP_201_CREATED})
         return Response({'result': status.HTTP_400_BAD_REQUEST})
 
     def get(self, request):
-        review_list = Review.objects.filter().order_by('-modify_date')[:5]
+        review_list = Review.objects.filter().order_by('-modify_date')[:4]
         serializer = self.serializer_class(review_list, many=True)
         return Response(serializer.data)

@@ -1,9 +1,8 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 
 from regiclass.models import Lecture
-
-MyUser = get_user_model()
 
 __all__ = (
     'Review',
@@ -17,7 +16,7 @@ class Review(models.Model):
         on_delete=models.CASCADE,
     )
     author = models.ForeignKey(
-        MyUser,
+        settings.AUTH_USER_MODEL,
     )
     curriculum_rate = models.IntegerField(
         default=0,

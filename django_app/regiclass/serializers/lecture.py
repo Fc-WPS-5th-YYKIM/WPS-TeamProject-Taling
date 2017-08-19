@@ -1,12 +1,13 @@
 from django.db.models import Sum, Avg
 from rest_framework import serializers
 
-from regiclass.models import Lecture, ClassLocation, LecturePhoto
+from regiclass.models import Lecture, ClassLocation, LecturePhoto, Curriculum
 from regiclass.serializers import ReviewSerializer
 
 __all__ = (
     'ClassLocationSerializer',
     'LecturePhotoSerializer',
+    'CurriculumSerializer',
     'LectureListSerializer',
     'LectureMakeSerializer',
 
@@ -34,15 +35,24 @@ class LecturePhotoSerializer(serializers.ModelSerializer):
         model = LecturePhoto
         fields = (
             'id',
-            'photo_type',
-            'photo',
-            'description',
+            'lecture_photo',
+        )
+
+
+class CurriculumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Curriculum
+        fields = (
+            'id',
+            'curriculum_photo',
+            'curriculum_desc',
         )
 
 
 class LectureListSerializer(serializers.ModelSerializer):
     locations = ClassLocationSerializer(many=True, read_only=True)
     lecture_photos = LecturePhotoSerializer(many=True, read_only=True)
+    curriculum = CurriculumSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
 
     class Meta:
@@ -72,7 +82,8 @@ class LectureListSerializer(serializers.ModelSerializer):
 
             'locations',
             'lecture_photos',
-            'reviews'
+            'curriculum',
+            'reviews',
         )
 
     def to_representation(self, instance):
@@ -96,6 +107,9 @@ class LectureListSerializer(serializers.ModelSerializer):
             kindness_rate=Sum('kindness_rate'),
             punctually_rate=Sum('punctually_rate')
         )
+        ret['tutor_info'] = {
+            'nickname': instance.tutor.author.nickname,
+        }
         return ret
 
 
@@ -124,14 +138,13 @@ class LectureMakeSerializer(serializers.ModelSerializer):
     class_time = serializers.ListField(
         child=serializers.CharField(),
     )
-
-    photo_type = serializers.ListField(
-        child=serializers.CharField(),
-    )
-    photo = serializers.ListField(
+    lecture_photo = serializers.ListField(
         child=serializers.ImageField(),
     )
-    description = serializers.ListField(
+    curriculum_photo = serializers.ListField(
+        child=serializers.ImageField(),
+    )
+    curriculum_desc = serializers.ListField(
         child=serializers.CharField(),
     )
 
@@ -170,12 +183,17 @@ class LectureMakeSerializer(serializers.ModelSerializer):
                     class_time=self.validated_data['class_time'][i],
                 )
 
-            for j in range(len(self.validated_data['photo_type'])):
+            for j in range(len(self.validated_data['lecture_photo'])):
                 LecturePhoto.objects.get_or_create(
                     lecture=lecture,
-                    photo_type=self.validated_data['photo_type'][j],
-                    photo=self.validated_data['photo'][j],
-                    description=self.validated_data['description'][j],
+                    lecture_photo=self.validated_data['lecture_photo'][j],
+                )
+
+            for k in range(len(self.validated_data['curriculum_photo'])):
+                Curriculum.objects.get_or_create(
+                    lecture=lecture,
+                    curriculum_photo=self.validated_data['curriculum_photo'][k],
+                    curriculum_desc=self.validated_data['curriculum_desc'][k]
                 )
 
     class Meta:
@@ -207,9 +225,10 @@ class LectureMakeSerializer(serializers.ModelSerializer):
             'class_weekday',
             'class_time',
 
-            'photo_type',
-            'photo',
-            'description'
+            'lecture_photo',
+
+            'curriculum_photo',
+            'curriculum_desc',
         )
         read_only_fields = (
             'lecture',

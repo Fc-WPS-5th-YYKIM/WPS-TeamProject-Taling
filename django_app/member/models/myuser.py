@@ -69,7 +69,7 @@ class MyUser(AbstractUser):
     user_type = models.CharField(max_length=1, choices=USER_TYPE_CHOICES, default=USER_TYPE_DJANGO)
 
     enrollments = models.ManyToManyField(
-        Lecture,
+        'regiclass.Lecture',
         through='regiclass.Enrollment',
         related_name='enroll_lectures',
     )

@@ -21,7 +21,7 @@ COPY            .config/nginx/nginx-app.conf /etc/nginx/sites-available/nginx-ap
 RUN             rm -rf /etc/nginx/sites-enabled/default
 RUN             ln -sf /etc/nginx/sites-available/nginx-app.conf /etc/nginx/sites-enabled/nginx-app.conf
 
-# collectstatic 실행
+# collectstatic 실행:
 RUN             /root/.pyenv/versions/taling/bin/python /srv/taling/django_app/manage.py collectstatic --settings=config.settings.deploy --noinput
 
 CMD             supervisord -n

@@ -94,6 +94,7 @@ class LoginSerializer(serializers.Serializer):
         ret = {
             'token': token.key,
             'user': {
+                'user_pk': user.pk,
                 'username': username,
                 'nickname': user.nickname,
             }

@@ -41,9 +41,11 @@ class LectureList(APIView):
     def post(self, request):
         search_text = request.POST.get('search_text', '')
         order_by = request.POST.get('ordering', '-modify_date')
+        category = request.POST.get('category', '')
         state = request.POST.get('state', Lecture.STATE_ACTIVITY)
         lecture_list = Lecture.objects.filter(
             (Q(title__contains=search_text) | Q(tutor__author__nickname__contains=search_text))
+            | (Q(category__contains=category))
             & (Q(state=state))
         ).order_by(order_by)
         serializer = self.serializer_class(lecture_list, context={'user':request.user}, many=True)
@@ -60,6 +62,17 @@ class LectureDetail(APIView):
         except Lecture.DoesNotExist:
             return Response({'result': '해당하는 강의 정보가 없습니다.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = self.serializer_class(lecture, context={'user':request.user})
+        return Response(serializer.data)
+
+    def patch(self, request):
+        lecture_id = request.data['lecture_id']
+        try:
+            lecture = get_object_or_404(Lecture, pk=lecture_id)
+        except Lecture.DoesNotExist:
+            return Response({'result': '해당하는 강의 정보가 없습니다.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer = self.serializer_class(lecture, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
         return Response(serializer.data)
 
 
