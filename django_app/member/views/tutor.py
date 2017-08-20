@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from member.models import Tutor, Certification
@@ -10,6 +11,7 @@ MyUser = get_user_model()
 
 __all__ = (
     'TutorRegister',
+    'TutorDetailView',
 )
 
 
@@ -44,5 +46,26 @@ class TutorRegister(APIView):
                     cert_name=instance['cert_name'][i],
                     cert_photo=instance['cert_photo'][i]
                 )
-
         return HttpResponse('helloworld')
+
+
+class TutorDetailView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def put(self, request, slug):
+        user = MyUser.objects.get(slug=slug)
+        tutor = Tutor.objects.get(author=user)
+        serializer = TutorRegisterSerializer(instance=tutor, data=request.data, partial=True)
+        if serializer.is_valid():
+            instance = serializer.validated_data
+            user.info_update(
+                my_photo=instance.get('my_photo', ''),
+                nickname=instance.get('nickname', ''),
+                phone=instance.get('phone', ''),
+            )
+            return HttpResponse('helloworld')
+
+    def delete(self, request, slug):
+        tutor = Tutor.objects.get(author=request.user)
+        tutor.delete()
+        return HttpResponse('Delete')

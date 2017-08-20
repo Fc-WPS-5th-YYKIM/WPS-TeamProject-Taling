@@ -155,7 +155,7 @@ class Lecture(models.Model):
 
 
 def create_slug(instance, new_slug=None):
-    slug = slugify('title-' + unidecode(instance.title))
+    slug = slugify('title-' + instance.title, allow_unicode=True)
     if new_slug is not None:
         slug = new_slug
     qs = Lecture.objects.filter(slug=slug).order_by("-id")
