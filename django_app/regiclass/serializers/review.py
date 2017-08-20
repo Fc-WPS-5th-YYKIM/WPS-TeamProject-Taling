@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from member.serializers import MyUserInfoSerializer
 from regiclass.models import Review
 
 __all__ = (
@@ -8,10 +9,12 @@ __all__ = (
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    author = MyUserInfoSerializer()
     class Meta:
         model = Review
         fields = (
             'id',
+            'author',
             'curriculum_rate',
             'delivery_rate',
             'preparation_rate',

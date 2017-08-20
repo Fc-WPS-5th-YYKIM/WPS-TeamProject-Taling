@@ -101,9 +101,13 @@ class Lecture(models.Model):
     )
     basic_class_time = models.CharField(
         max_length=10,
+        blank=True,
+        null=True,
     )
     total_count = models.CharField(
         max_length=10,
+        blank=True,
+        null=True,
     )
     youtube_url1 = models.CharField(
         max_length=100,
@@ -117,10 +121,12 @@ class Lecture(models.Model):
     )
     region_comment = models.CharField(
         max_length=100,
+        blank=True,
         null=True,
     )
     notice = models.CharField(
         max_length=100,
+        blank=True,
         null=True,
     )
     state = models.CharField(
