@@ -39,6 +39,16 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
             'cert_photo',
         )
 
+    def update(self, instance, validated_data):
+        print('update')
+        instance.cert_type = validated_data.get('cert_type', instance.cert_type)
+        instance.school = validated_data.get('school', instance.school)
+        instance.major = validated_data.get('major', instance.major)
+        instance.status_type = validated_data.get('status_type', instance.status_type)
+
+        instance.save()
+        return instance
+
     def validate_my_photo(self, data):
         return data
 
