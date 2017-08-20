@@ -52,9 +52,9 @@ class TutorRegister(APIView):
 class TutorDetailView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def put(self, request, slug):
-        user = MyUser.objects.get(slug=slug)
-        tutor = Tutor.objects.get(author=user)
+    def put(self, request, tutor_pk):
+        tutor = Tutor.objects.get(pk=tutor_pk)
+        user = tutor.author
         serializer = TutorRegisterSerializer(instance=tutor, data=request.data, partial=True)
         if serializer.is_valid():
             instance = serializer.validated_data
@@ -65,7 +65,7 @@ class TutorDetailView(APIView):
             )
             return HttpResponse('helloworld')
 
-    def delete(self, request, slug):
+    def delete(self, request):
         tutor = Tutor.objects.get(author=request.user)
         tutor.delete()
         return HttpResponse('Delete')
