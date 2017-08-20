@@ -25,7 +25,7 @@ class MyUserInfoSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'phone',
-
+            'my_photo',
         )
 
 

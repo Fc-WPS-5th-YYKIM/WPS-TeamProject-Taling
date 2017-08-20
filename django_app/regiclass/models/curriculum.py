@@ -15,6 +15,8 @@ class Curriculum(models.Model):
     )
     curriculum_photo = models.ImageField(
         upload_to='class/images/%Y/%m/%d',
+        blank=True,
+        null=True,
     )
     curriculum_desc = models.CharField(
         max_length=100,
