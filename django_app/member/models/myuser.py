@@ -54,6 +54,7 @@ class MyUser(AbstractUser):
 
     nickname = models.CharField(
         max_length=24,
+        blank=True,
     )
 
     ##
@@ -86,35 +87,37 @@ class MyUser(AbstractUser):
     def get_user_token(self, user_pk):
         return Token.objects.get_or_create(user_id=user_pk)
 
-    ##
-    # 슬러그 생성
-    ##
-    slug = models.SlugField(
-        unique=True,
-        blank=True,
-        db_index=True,
-        allow_unicode=True,
-    )
-
-
-def create_slug(instance, new_slug=None):
-    if instance.user_type == 'f':
-        slug = slugify(instance.usernae)
-    else:
-        slug = slugify(instance.nickname, allow_unicode=True)
-
-    if new_slug is not None:
-        slug = new_slug
-    qs = MyUser.objects.filter(slug=slug).order_by("-id")
-    exists = qs.exists()
-    if exists:
-        new_slug = '{}-{}'.format(slug, qs.first().id)
-        return create_slug(instance, new_slug=new_slug)
-    return slug
-
-def pre_save_post_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = create_slug(instance)
-
-pre_save.connect(pre_save_post_receiver, sender=MyUser)
+#     ##
+#     # 슬러그 생성
+#     ##
+#     slug = models.SlugField(
+#         unique=True,
+#         blank=True,
+#         db_index=True,
+#         allow_unicode=True,
+#     )
+#
+#
+# def create_slug(instance, new_slug=None):
+#     if instance.user_type == 'f':
+#         slug = slugify(instance.username)
+#     else:
+#         slug = slugify(instance.nickname, allow_unicode=True)
+#
+#     if new_slug is not None:
+#         slug = new_slug
+#     qs = MyUser.objects.filter(slug=slug).order_by("-id")
+#
+#     exists = qs.exists()
+#     if exists:
+#         new_slug = '{}-{}'.format(slug, qs.first().id)
+#         return create_slug(instance, new_slug=new_slug)
+#     return slug
+#
+#
+# def pre_save_post_receiver(sender, instance, *args, **kwargs):
+#     if not instance.slug:
+#         instance.slug = create_slug(instance)
+#
+# pre_save.connect(pre_save_post_receiver, sender=MyUser)
 

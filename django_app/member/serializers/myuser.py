@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from rest_framework import serializers, exceptions
 from rest_framework.authtoken.models import Token
 
+from member.models import Tutor
+
 MyUser = get_user_model()
 
 __all__ = (
@@ -82,6 +84,12 @@ class LoginSerializer(serializers.Serializer):
         username = data['username']
         user = MyUser.objects.get(username=username)
 
+        try:
+            tutor = Tutor.objects.get(author=user)
+            tutor_pk = tutor.pk
+        except Tutor.DoesNotExist:
+            tutor_pk = None
+
         if data['user_type'] == 'd':
             password = data['password']
 
@@ -95,6 +103,7 @@ class LoginSerializer(serializers.Serializer):
             'token': token.key,
             'user': {
                 'user_pk': user.pk,
+                'tutor_pk': tutor_pk,
                 'username': username,
                 'nickname': user.nickname,
             }
