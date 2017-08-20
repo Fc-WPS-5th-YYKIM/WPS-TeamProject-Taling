@@ -11,7 +11,6 @@ __all__ = (
 
 
 class TutorRegisterSerializer(serializers.ModelSerializer):
-    # basic_info = MyUserUpdateSerializer(many=False)
     my_photo = serializers.ImageField(required=True)
     nickname = serializers.CharField(required=True)
     phone = serializers.CharField(required=True)
