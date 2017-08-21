@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -30,11 +32,16 @@ class LectureMake(APIView):
         if serializer.is_valid():
             try:
                 tutor = get_object_or_404(Tutor, author=user)
+                result = serializer.save(tutor=tutor)
+                if not result['status']:
+                    return Response(
+                        {'result': str(result['message'])},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
             except Tutor.DoesNotExist:
-                return Response({'result': '튜터가 아닌 사용자는 강의를 개설할 수 없습니다'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            serializer.save(tutor=tutor)
+                return Response({'result': '튜터가 아닌 사용자는 강의를 개설할 수 없습니다'}, status=status.HTTP_400_BAD_REQUEST)
             return Response({'result': status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
-        return Response({'result': status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LcetureUpdate(APIView):
