@@ -9,7 +9,7 @@ __all__ = (
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    author = MyUserInfoSerializer()
+    author = MyUserInfoSerializer(read_only=True)
     class Meta:
         model = Review
         fields = (
