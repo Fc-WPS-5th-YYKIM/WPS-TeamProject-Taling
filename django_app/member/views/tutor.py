@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from member.models import Tutor, Certification
 from member.serializers import TutorRegisterSerializer
+from member.serializers.tutor import TutorSerializer
 from utils.permissions import IsOwnerOrReadOnly
 
 MyUser = get_user_model()
@@ -46,13 +47,17 @@ class TutorRegister(APIView):
                     cert_name=instance['cert_name'][i],
                     cert_photo=instance['cert_photo'][i]
                 )
-        return Response(serializer.data)
+
+            return Response(TutorSerializer(tutor).data)
 
 
 class TutorDetailView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, ):
+    def get(self, request, tutor_pk):
+        tutor = Tutor.objects.get(pk=tutor_pk)
+        serializer = TutorSerializer(tutor)
+        return Response(serializer.data)
 
     def put(self, request, tutor_pk):
         tutor = Tutor.objects.get(pk=tutor_pk)
@@ -66,9 +71,9 @@ class TutorDetailView(APIView):
                 phone=instance.get('phone', user.phone),
             )
             serializer.save()
-            return Response(serializer.data)
+            return self.get(request, tutor_pk)
 
-    def delete(self, request):
+    def delete(self, request, tutor_pk):
         tutor = Tutor.objects.get(author=request.user)
         tutor.delete()
         return HttpResponse('Delete')

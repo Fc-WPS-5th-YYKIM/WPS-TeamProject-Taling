@@ -1,5 +1,3 @@
-from itertools import chain
-
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -9,6 +7,9 @@ MyUser = get_user_model()
 
 __all__ = (
     'TutorRegisterSerializer',
+    'MyUserInfoSerializer',
+    'CertificationSerializer',
+    'TutorSerializer'
 )
 
 
@@ -38,6 +39,46 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
             'cert_photo',
         )
 
+    def validate(self, data):
+        return data
+
+
+class MyUserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = (
+            'my_photo',
+            'nickname',
+            'phone',
+        )
+
+
+class CertificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Certification
+        fields = (
+            'cert_name',
+            'cert_photo',
+        )
+
+
+class TutorSerializer(serializers.ModelSerializer):
+    author = MyUserInfoSerializer()
+    certification = CertificationSerializer(many=True)
+
+    class Meta:
+        model = Tutor
+        fields = (
+            'cert_type',
+            'school',
+            'major',
+            'status_type',
+
+            'author',
+            'certification',
+        )
+
     def update(self, instance, validated_data):
         print('update')
         instance.cert_type = validated_data.get('cert_type', instance.cert_type)
@@ -46,28 +87,13 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
         instance.status_type = validated_data.get('status_type', instance.status_type)
 
         # user = instance.author
+        # user.my_photo = validated_data.get('my_photo', user.my_photo)
         # user.nickname = validated_data.get('nickname', user.nickname)
         # user.phone = validated_data.get('phone', user.phone)
-        # user.my_photo = validated_data.get('my_photo', user.my_photo)
 
         instance.save()
 
         return instance
-
-    # def validate_my_photo(self, data):
-    #     return data
-    #
-    # def validate_nickname(self, data):
-    #     return data
-    #
-    # def validate_phone(self, data):
-    #     return data
-    #
-    # def validate_cert_name(self, data):
-    #     return data
-    #
-    # def validate_cert_photo(self, data):
-    #     return data
 
     def validate(self, data):
         return data
