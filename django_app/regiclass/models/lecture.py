@@ -87,15 +87,9 @@ class Lecture(models.Model):
     cover_photo = models.ImageField(
         upload_to='class/cover/%Y/%m/%d',
     )
-    tutor_intro = models.CharField(
-        max_length=100,
-    )
-    class_intro = models.CharField(
-        max_length=100,
-    )
-    target_intro = models.CharField(
-        max_length=100,
-    )
+    tutor_intro = models.TextField()
+    class_intro = models.TextField()
+    target_intro = models.TextField()
     price = models.CharField(
         max_length=10,
     )
