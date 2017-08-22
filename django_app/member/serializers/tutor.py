@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -16,11 +18,9 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(required=True)
     cert_name = serializers.ListField(
         child=serializers.CharField(),
-        # write_only=True
     )
     cert_photo = serializers.ListField(
         child=serializers.ImageField(),
-        # write_only=True
     )
 
     class Meta:
@@ -30,7 +30,7 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
             'school',
             'major',
             'status_type',
-            # 'identification',
+
             'my_photo',
             'nickname',
             'phone',
@@ -45,23 +45,29 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
         instance.major = validated_data.get('major', instance.major)
         instance.status_type = validated_data.get('status_type', instance.status_type)
 
+        # user = instance.author
+        # user.nickname = validated_data.get('nickname', user.nickname)
+        # user.phone = validated_data.get('phone', user.phone)
+        # user.my_photo = validated_data.get('my_photo', user.my_photo)
+
         instance.save()
+
         return instance
 
-    def validate_my_photo(self, data):
-        return data
-
-    def validate_nickname(self, data):
-        return data
-
-    def validate_phone(self, data):
-        return data
-
-    def validate_cert_name(self, data):
-        return data
-
-    def validate_cert_photo(self, data):
-        return data
+    # def validate_my_photo(self, data):
+    #     return data
+    #
+    # def validate_nickname(self, data):
+    #     return data
+    #
+    # def validate_phone(self, data):
+    #     return data
+    #
+    # def validate_cert_name(self, data):
+    #     return data
+    #
+    # def validate_cert_photo(self, data):
+    #     return data
 
     def validate(self, data):
         return data
