@@ -13,9 +13,10 @@ urlpatterns = [
     url(r'^review/list/$', views.Reviews.as_view(), name='list_review'),
 
     # 수강신청
-    url(r'^talent/guide/(?P<slug>[-\w\d]+)/$', views.TalenteGuideView.as_view(), name='talent-guide'),
-    url(r'^talent/check/(?P<slug>[-\w\d]+)/$', views.CheckLocationView.as_view(), name='talent-check'),
-    url(r'^talent/apply/(?P<slug>[-\w\d]+)/$', views.ApplyMyTalentView.as_view(), name='talent-apply'),
-    url(r'^talent/auth/(?P<slug>[-\w\d]+)/$', views.StudentAuthView.as_view(), name='talent-auth'),
-    url(r'^talent/pay/(?P<slug>[-\w\d]+)/$', views.ClassPaymentView.as_view(), name='talent-pay'),
+    url(r'^lecture/register/(?P<lecture_pk>[0-9]+)/$', views.EnrollmentView.as_view(), name='enrollment'),
+    # url(r'^talent/guide/(?P<slug>[-\w\d]+)/$', views.TalenteGuideView.as_view(), name='talent-guide'),
+    # url(r'^talent/check/(?P<slug>[-\w\d]+)/$', views.CheckLocationView.as_view(), name='talent-check'),
+    # url(r'^talent/apply/(?P<slug>[-\w\d]+)/$', views.ApplyMyTalentView.as_view(), name='talent-apply'),
+    # url(r'^talent/auth/(?P<slug>[-\w\d]+)/$', views.StudentAuthView.as_view(), name='talent-auth'),
+    # url(r'^talent/pay/(?P<slug>[-\w\d]+)/$', views.ClassPaymentView.as_view(), name='talent-pay'),
 ]

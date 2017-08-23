@@ -54,7 +54,7 @@ class MyUser(AbstractUser):
 
     nickname = models.CharField(
         max_length=24,
-        blank=True,
+        blank=True
     )
 
     ##

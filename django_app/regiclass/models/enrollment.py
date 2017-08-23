@@ -13,6 +13,7 @@ class Enrollment(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        related_name='tutor_info',
     )
 
     lecture = models.ForeignKey(
@@ -21,9 +22,9 @@ class Enrollment(models.Model):
         related_name='enrollment_lecture',
     )
 
-    location = models.CharField(max_length=24)
-    class_day = models.CharField(max_length=8)
-    class_time = models.CharField(max_length=24)
+    location = models.CharField(max_length=24, blank=True)
+    class_day = models.CharField(max_length=8, blank=True)
+    class_time = models.CharField(max_length=24, blank=True)
 
     LEVEL_BEGINNER = 'beginner'
     LEVEL_INTERMEDIATE = 'intermediate'
@@ -42,7 +43,7 @@ class Enrollment(models.Model):
     )
 
     career = models.CharField(max_length=36, blank=True,)
-    to_tutor = models.TextField(blank=True,)
+    to_tutor = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True,)
     modified_at = models.DateTimeField(auto_now=True,)
 
