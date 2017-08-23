@@ -11,6 +11,7 @@ from member.models import Tutor
 from regiclass.models import Lecture, ClassLocation
 from regiclass.serializers import LectureListSerializer, LectureMakeSerializer
 from regiclass.serializers.lecture import LectureUpdateSerializer
+from utils.custom_exceptions.functions import custom_key_error
 
 MyUser = get_user_model()
 
@@ -71,9 +72,9 @@ class LectureList(APIView):
     serializer_class = LectureListSerializer
 
     def post(self, request):
-        search_text = request.POST.get('search_text', '')
-        order_by = request.POST.get('ordering', '-modify_date')
-        category = request.POST.get('category', '')
+        search_text = custom_key_error(request, 'search_text', '')
+        order_by = custom_key_error(request, 'ordering', '-modify_date')
+        category = custom_key_error(request, 'category', '')
         state = request.POST.get('state', Lecture.STATE_ACTIVITY)
         lecture_list = Lecture.objects.filter(
             (Q(title__contains=search_text) | Q(tutor__author__nickname__contains=search_text))
