@@ -88,7 +88,7 @@ class LectureDetail(APIView):
     serializer_class = LectureListSerializer
 
     def post(self, request):
-        lecture_id = request.POST.get('lecture_id')
+        lecture_id = request.data['lecture_id']
         try:
             lecture = get_object_or_404(Lecture, pk=lecture_id)
         except Lecture.DoesNotExist:
