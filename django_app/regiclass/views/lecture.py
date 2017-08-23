@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -21,6 +22,7 @@ __all__ = (
     'LectureList',
     'LectureDetail',
     'LikeLecture',
+    'LectureDelete',
 )
 
 
@@ -108,3 +110,16 @@ class LikeLecture(APIView):
         if not like_created:
             like_lecture.delete()
         return Response({'created': like_created}, status=status.HTTP_201_CREATED)
+
+
+class LectureDelete(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        lecture_id = request.data['lecture_id']
+        try:
+            lecture = get_object_or_404(Lecture, pk=lecture_id, tutor__author__username=request.user)
+            lecture.delete()
+        except Lecture.DoesNotExist:
+            return Response({'result': '해당하는 강의 정보가 없습니다.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'result': 'Deleted'}, status=status.HTTP_200_OK)
