@@ -14,8 +14,13 @@ MyUser = get_user_model()
 
 class EnrollmentView(APIView):
     def get(self, request, lecture_pk):
+        context = {
+            'user': {
+                'username': request.user.username,
+            }
+        }
         lecture = Lecture.objects.get(pk=lecture_pk)
-        serializer = LectureInfoSerializer(lecture)
+        serializer = LectureInfoSerializer(lecture, context=context)
         return Response(serializer.data)
 
     def post(self, request, lecture_pk):
