@@ -7,21 +7,21 @@ MyUser = get_user_model()
 
 __all__ = (
     'TutorRegisterSerializer',
+    'MyUserInfoSerializer',
+    'CertificationSerializer',
+    'TutorSerializer'
 )
 
 
 class TutorRegisterSerializer(serializers.ModelSerializer):
-    # basic_info = MyUserUpdateSerializer(many=False)
     my_photo = serializers.ImageField(required=True)
     nickname = serializers.CharField(required=True)
     phone = serializers.CharField(required=True)
     cert_name = serializers.ListField(
         child=serializers.CharField(),
-        # write_only=True
     )
     cert_photo = serializers.ListField(
         child=serializers.ImageField(),
-        # write_only=True
     )
 
     class Meta:
@@ -31,12 +31,52 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
             'school',
             'major',
             'status_type',
-            # 'identification',
+
             'my_photo',
             'nickname',
             'phone',
             'cert_name',
             'cert_photo',
+        )
+
+    def validate(self, data):
+        return data
+
+
+class MyUserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = (
+            'my_photo',
+            'nickname',
+            'phone',
+        )
+
+
+class CertificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Certification
+        fields = (
+            'cert_name',
+            'cert_photo',
+        )
+
+
+class TutorSerializer(serializers.ModelSerializer):
+    author = MyUserInfoSerializer()
+    certification = CertificationSerializer(many=True)
+
+    class Meta:
+        model = Tutor
+        fields = (
+            'cert_type',
+            'school',
+            'major',
+            'status_type',
+
+            'author',
+            'certification',
         )
 
     def update(self, instance, validated_data):
@@ -46,23 +86,14 @@ class TutorRegisterSerializer(serializers.ModelSerializer):
         instance.major = validated_data.get('major', instance.major)
         instance.status_type = validated_data.get('status_type', instance.status_type)
 
+        # user = instance.author
+        # user.my_photo = validated_data.get('my_photo', user.my_photo)
+        # user.nickname = validated_data.get('nickname', user.nickname)
+        # user.phone = validated_data.get('phone', user.phone)
+
         instance.save()
+
         return instance
-
-    def validate_my_photo(self, data):
-        return data
-
-    def validate_nickname(self, data):
-        return data
-
-    def validate_phone(self, data):
-        return data
-
-    def validate_cert_name(self, data):
-        return data
-
-    def validate_cert_photo(self, data):
-        return data
 
     def validate(self, data):
         return data
