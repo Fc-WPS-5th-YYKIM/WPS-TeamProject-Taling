@@ -16,4 +16,8 @@ urlpatterns = [
     # Tutor
     url(r'^tutor/register/$', views.TutorRegister.as_view(), name='tutor-register'),
     url(r'^tutor/detail/(?P<tutor_pk>[0-9]+)/$', views.TutorDetailView.as_view(), name='tutor-detail'),
+
+    # Class List
+    url(r'^class/list/$', views.MyClassListView.as_view(), name='my-class-list'),
+    url(r'^like/class/list/$', views.LikeClassListView.as_view(), name='like-class-list'),
 ]

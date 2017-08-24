@@ -55,7 +55,7 @@ class EnrollmentSerializer(serializers.ModelSerializer):\
 
 # class MyUserSerializer(serializers.ModelSerializer):
 #     class Meta:
-#         model = settings.AUTH_
+#         model = MyUser
 #         fields = ('username')
 
 

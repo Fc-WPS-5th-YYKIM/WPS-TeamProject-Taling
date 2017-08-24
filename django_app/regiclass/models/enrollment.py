@@ -13,7 +13,6 @@ class Enrollment(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='tutor_info',
     )
 
     lecture = models.ForeignKey(

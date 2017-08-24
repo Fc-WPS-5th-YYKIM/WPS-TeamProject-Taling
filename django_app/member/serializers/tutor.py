@@ -70,6 +70,7 @@ class TutorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tutor
         fields = (
+            'pk',
             'cert_type',
             'school',
             'major',
