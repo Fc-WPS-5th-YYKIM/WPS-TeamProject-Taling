@@ -16,4 +16,7 @@ urlpatterns = [
     # Tutor
     url(r'^tutor/register/$', views.TutorRegister.as_view(), name='tutor-register'),
     url(r'^tutor/detail/(?P<tutor_pk>[0-9]+)/$', views.TutorDetailView.as_view(), name='tutor-detail'),
+
+    #
+    url(r'^class/list/$', views.MyClassListView.as_view(), name='my-class-list'),
 ]
