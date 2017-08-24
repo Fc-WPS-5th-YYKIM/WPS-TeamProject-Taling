@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from member.models import MyUser, Tutor
-from regiclass.models import Enrollment, Lecture
+from regiclass.models import Enrollment, Lecture, LikeLecture
 
 
 class MyUserInfoSerializer(serializers.ModelSerializer):
@@ -44,3 +44,12 @@ class MyClassListSerializer(serializers.ModelSerializer):
             'lecture',
         )
 
+
+class LikeClassListSerializer(serializers.ModelSerializer):
+    lecture = LectureInfoSerializer()
+
+    class Meta:
+        model = LikeLecture
+        fields = (
+            'lecture',
+        )
